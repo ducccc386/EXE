@@ -1,3 +1,5 @@
+import { Squiggly, Triangle, Diamond } from "./shared";
+
 const testimonials = [
   {
     name: "William Smith",
@@ -25,55 +27,17 @@ const testimonials = [
   },
 ];
 
-function Squiggly({ color = "#3B82F6", className = "" }) {
-  return (
-    <svg viewBox="0 0 80 20" fill="none" className={className}>
-      <path
-        d="M2 10 C10 2, 18 18, 26 10 C34 2, 42 18, 50 10 C58 2, 66 18, 74 10"
-        stroke={color} strokeWidth="3" strokeLinecap="round" fill="none"
-      />
-    </svg>
-  );
-}
-
-function Triangle({ color = "#F97316", className = "" }) {
-  return (
-    <svg viewBox="0 0 40 36" fill="none" className={className}>
-      <path d="M20 3L37 33H3L20 3Z" stroke={color} strokeWidth="3" fill="none" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function Diamond({ color = "#3B82F6", className = "" }) {
-  return (
-    <svg viewBox="0 0 30 30" fill="none" className={className}>
-      <rect x="4" y="4" width="22" height="22" rx="3" stroke={color} strokeWidth="3" fill="none" transform="rotate(45 15 15)" />
-    </svg>
-  );
-}
-
 export default function TestimonialsSection() {
   return (
     <section className="bg-white py-20 overflow-hidden relative">
-
-      {/* === DECORATIVE SHAPES === */}
-      {/* Top-left squiggly + diamond */}
       <Squiggly color="#3B82F6" className="absolute top-10 left-10 w-16 opacity-70" />
       <Diamond color="#F97316" className="absolute top-16 left-28 w-6 opacity-60" />
-
-      {/* Bottom-left big yellow circle */}
       <div className="absolute bottom-0 left-0 w-36 h-36 bg-amber-300 rounded-full opacity-85 -translate-x-1/2 translate-y-1/2" />
-      {/* Bottom-left squiggly */}
       <Squiggly color="#3B82F6" className="absolute bottom-14 left-12 w-14 opacity-70" />
-
-      {/* Top-right big cyan circle */}
       <div className="absolute top-4 right-0 w-24 h-24 bg-cyan-400 rounded-full opacity-90 translate-x-1/3" />
-
-      {/* Right-mid triangle + squiggly */}
       <Triangle color="#F97316" className="absolute top-1/2 right-14 w-8 opacity-55 -translate-y-6" />
       <Squiggly color="#3B82F6" className="absolute bottom-20 right-10 w-16 opacity-60" />
 
-      {/* === CONTENT === */}
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="text-center mb-14">
           <span className="text-orange-500 text-xs font-bold uppercase tracking-widest mb-3 block">
@@ -88,18 +52,13 @@ export default function TestimonialsSection() {
           {testimonials.map((t, i) => (
             <div
               key={i}
-              className={`relative rounded-3xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
-                i === 1
+              className={`relative rounded-3xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${i === 1
                   ? "bg-blue-600 text-white shadow-xl shadow-blue-200 scale-105"
                   : "bg-gray-50 border border-gray-100"
-              }`}
+                }`}
             >
-              <div className={`text-5xl font-serif leading-none mb-4 ${i === 1 ? "text-blue-300" : "text-orange-200"}`}>
-                "
-              </div>
-              <p className={`text-sm leading-relaxed mb-6 ${i === 1 ? "text-blue-100" : "text-gray-500"}`}>
-                {t.text}
-              </p>
+              <div className={`text-5xl font-serif leading-none mb-4 ${i === 1 ? "text-blue-300" : "text-orange-200"}`}>"</div>
+              <p className={`text-sm leading-relaxed mb-6 ${i === 1 ? "text-blue-100" : "text-gray-500"}`}>{t.text}</p>
               <div className="flex gap-1 mb-4">
                 {Array.from({ length: t.stars }).map((_, j) => (
                   <svg key={j} className={`w-4 h-4 ${i === 1 ? "text-amber-300" : "text-amber-400"}`} fill="currentColor" viewBox="0 0 20 20">
@@ -108,9 +67,7 @@ export default function TestimonialsSection() {
                 ))}
               </div>
               <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 ${t.color} rounded-full flex items-center justify-center text-white text-xs font-bold`}>
-                  {t.initials}
-                </div>
+                <div className={`w-10 h-10 ${t.color} rounded-full flex items-center justify-center text-white text-xs font-bold`}>{t.initials}</div>
                 <div>
                   <p className={`font-bold text-sm ${i === 1 ? "text-white" : "text-gray-800"}`}>{t.name}</p>
                   <p className={`text-xs ${i === 1 ? "text-blue-200" : "text-gray-400"}`}>{t.role}</p>
