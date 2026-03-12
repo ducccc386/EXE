@@ -2,27 +2,27 @@ import { Squiggly, Triangle, Diamond } from "./shared";
 
 const testimonials = [
   {
-    name: "William Smith",
-    role: "Student At College",
+    name: "Nguyễn Minh Tuấn",
+    role: "Sinh viên Đại học",
     stars: 5,
-    text: "As a student of this online education website, I can confidently say that it has been an incredible experience. The platform is user-friendly and the courses are well-structured, making it easy for me to learn at my own pace.",
-    initials: "WS",
+    text: "Là học viên của StudyHub, tôi có thể tự tin nói rằng đây là trải nghiệm học tập tuyệt vời. Nền tảng dễ sử dụng, các khóa học được thiết kế bài bản giúp tôi học theo tốc độ của mình.",
+    initials: "MT",
     color: "bg-blue-500",
   },
   {
-    name: "Sarah Johnson",
-    role: "High School Student",
+    name: "Trần Thu Hà",
+    role: "Học sinh THPT",
     stars: 5,
-    text: "Finding a tutor has never been easier! The matching system is spot on and my tutor is incredibly helpful. My grades have improved significantly since I started using StudyHub.",
-    initials: "SJ",
+    text: "Tìm gia sư chưa bao giờ dễ đến vậy! Hệ thống ghép cặp rất chính xác và gia sư của tôi cực kỳ nhiệt tình. Điểm số của tôi đã cải thiện đáng kể kể từ khi dùng StudyHub.",
+    initials: "TH",
     color: "bg-orange-500",
   },
   {
-    name: "Mike Chen",
-    role: "University Student",
+    name: "Lê Hoàng Nam",
+    role: "Sinh viên năm 3",
     stars: 5,
-    text: "The interactive whiteboard makes online tutoring feel like an in-person session. My tutor explains concepts clearly and the scheduling system is very convenient for my busy life.",
-    initials: "MC",
+    text: "Bảng trắng tương tác giúp việc học trực tuyến như học trực tiếp. Gia sư giải thích rõ ràng và hệ thống đặt lịch rất tiện lợi cho lịch bận rộn của tôi.",
+    initials: "HN",
     color: "bg-green-500",
   },
 ];
@@ -41,22 +41,18 @@ export default function TestimonialsSection() {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="text-center mb-14">
           <span className="text-orange-500 text-xs font-bold uppercase tracking-widest mb-3 block">
-            Our Testimonials
+            Học viên nói gì
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">
-            What Our Students Say About Us
+            Cảm nhận của học viên về StudyHub
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {testimonials.map((t, i) => (
-            <div
-              key={i}
-              className={`relative rounded-3xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${i === 1
-                  ? "bg-blue-600 text-white shadow-xl shadow-blue-200 scale-105"
-                  : "bg-gray-50 border border-gray-100"
-                }`}
-            >
+            <div key={i}
+              className={`relative rounded-3xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${i === 1 ? "bg-blue-600 text-white shadow-xl shadow-blue-200 scale-105" : "bg-gray-50 border border-gray-100"
+                }`}>
               <div className={`text-5xl font-serif leading-none mb-4 ${i === 1 ? "text-blue-300" : "text-orange-200"}`}>"</div>
               <p className={`text-sm leading-relaxed mb-6 ${i === 1 ? "text-blue-100" : "text-gray-500"}`}>{t.text}</p>
               <div className="flex gap-1 mb-4">

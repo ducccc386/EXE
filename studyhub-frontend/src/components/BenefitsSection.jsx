@@ -6,8 +6,8 @@ const benefits = [
       </svg>
     ),
     bg: "bg-blue-500",
-    title: "One-on-one Teaching",
-    desc: "All of our special education experts have a degree in special education.",
+    title: "Học 1 kèm 1",
+    desc: "Tất cả gia sư đều có chuyên môn và được đào tạo bài bản trong lĩnh vực của họ.",
   },
   {
     icon: (
@@ -16,8 +16,8 @@ const benefits = [
       </svg>
     ),
     bg: "bg-green-500",
-    title: "24/7 Tutor Availability",
-    desc: "Our tutors are always available to respond as quick as possible for you.",
+    title: "Gia sư 24/7",
+    desc: "Gia sư của chúng tôi luôn sẵn sàng hỗ trợ bạn nhanh nhất có thể bất cứ lúc nào.",
   },
   {
     icon: (
@@ -26,8 +26,8 @@ const benefits = [
       </svg>
     ),
     bg: "bg-orange-500",
-    title: "Interactive Whiteboard",
-    desc: "Our digital whiteboard equipped with audio and video chat features.",
+    title: "Bảng trắng tương tác",
+    desc: "Bảng trắng kỹ thuật số tích hợp âm thanh và video chat để học trực tuyến hiệu quả.",
   },
   {
     icon: (
@@ -36,8 +36,8 @@ const benefits = [
       </svg>
     ),
     bg: "bg-pink-500",
-    title: "Affordable Prices",
-    desc: "Choose an expert tutor based on your budget and per hour rate.",
+    title: "Học phí hợp lý",
+    desc: "Chọn gia sư phù hợp với ngân sách của bạn và mức giá theo giờ linh hoạt.",
   },
 ];
 
@@ -45,25 +45,19 @@ export default function BenefitsSection() {
   return (
     <section className="bg-gray-50 py-20">
       <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
         <div className="text-center mb-14">
           <span className="text-orange-500 text-xs font-bold uppercase tracking-widest mb-3 block">
-            Why Choose Us
+            Tại sao chọn chúng tôi
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">
-            Benefits of online tutoring
+            Lợi ích khi học gia sư trực tuyến
             <br />
-            services with us
+            cùng StudyHub
           </h2>
         </div>
-
-        {/* Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {benefits.map((b, i) => (
-            <div
-              key={i}
-              className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 group"
-            >
+            <div key={i} className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 group">
               <div className={`w-12 h-12 ${b.bg} rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform shadow-md`}>
                 {b.icon}
               </div>

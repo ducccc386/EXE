@@ -12,8 +12,8 @@ const contactInfo = [
       </svg>
     ),
     bg: "bg-orange-500",
-    label: "Our Address",
-    value: "123 Education Street, Learning City, LC 10001",
+    label: "Địa chỉ",
+    value: "123 Đường Giáo Dục, TP. Hồ Chí Minh",
   },
   {
     icon: (
@@ -22,8 +22,8 @@ const contactInfo = [
       </svg>
     ),
     bg: "bg-blue-600",
-    label: "Email Us",
-    value: "hello@studyhub.com",
+    label: "Email",
+    value: "xinchaostudyhub.vn",
   },
   {
     icon: (
@@ -32,8 +32,8 @@ const contactInfo = [
       </svg>
     ),
     bg: "bg-green-500",
-    label: "Call Us",
-    value: "+1 (555) 000-0000",
+    label: "Điện thoại",
+    value: "+84 (0) 123 456 789",
   },
   {
     icon: (
@@ -42,16 +42,16 @@ const contactInfo = [
       </svg>
     ),
     bg: "bg-purple-500",
-    label: "Working Hours",
-    value: "Mon - Fri: 8:00 AM – 8:00 PM",
+    label: "Giờ làm việc",
+    value: "Thứ 2 - Thứ 6: 8:00 - 20:00",
   },
 ];
 
 const faqs = [
-  { q: "How do I find a tutor?", a: "Simply search by subject, filter by availability and budget, then book a session directly with your chosen tutor." },
-  { q: "Is StudyHub free to use?", a: "Signing up and browsing tutors is completely free. You only pay when you book a session." },
-  { q: "Can I change my tutor?", a: "Yes, absolutely! You can switch tutors at any time with no extra fees or questions asked." },
-  { q: "How does online tutoring work?", a: "Sessions happen on our interactive whiteboard with video, audio, and screen sharing support." },
+  { q: "Làm sao để tìm gia sư?", a: "Chỉ cần tìm kiếm theo môn học, lọc theo lịch rảnh và ngân sách, sau đó đặt lịch trực tiếp với gia sư bạn chọn." },
+  { q: "StudyHub có miễn phí không?", a: "Đăng ký và tìm kiếm gia sư hoàn toàn miễn phí. Bạn chỉ trả tiền khi đặt buổi học." },
+  { q: "Tôi có thể đổi gia sư không?", a: "Hoàn toàn có thể! Bạn có thể đổi gia sư bất cứ lúc nào mà không mất thêm phí." },
+  { q: "Học trực tuyến hoạt động như thế nào?", a: "Các buổi học diễn ra trên bảng trắng tương tác với hỗ trợ video, âm thanh và chia sẻ màn hình." },
 ];
 
 export default function ContactPage() {
@@ -69,9 +69,9 @@ export default function ContactPage() {
       <Navbar />
 
       <PageHeader
-        tag="Get In Touch"
-        title="Contact Us"
-        description="Have a question or want to partner with us? We'd love to hear from you. Our team usually responds within 24 hours."
+        tag="Liên hệ với chúng tôi"
+        title="Liên hệ"
+        description="Bạn có câu hỏi hoặc muốn hợp tác? Chúng tôi rất muốn nghe từ bạn. Đội ngũ thường phản hồi trong vòng 24 giờ."
       />
 
       {/* Contact Info Cards */}
@@ -118,13 +118,13 @@ export default function ContactPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">Full Name</label>
-                    <input type="text" required placeholder="John Doe" value={form.name}
+                    <input type="text" required placeholder="Nguyễn Văn A" value={form.name}
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
                       className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all" />
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">Email Address</label>
-                    <input type="email" required placeholder="john@email.com" value={form.email}
+                    <input type="email" required placeholder="nguyenvana@email.com" value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
                       className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all" />
                   </div>
@@ -145,7 +145,7 @@ export default function ContactPage() {
 
                 <div>
                   <label className="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">Message</label>
-                  <textarea required rows={5} placeholder="Write your message here..." value={form.message}
+                  <textarea required rows={5} placeholder="Viết nội dung tin nhắn..." value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all resize-none" />
                 </div>

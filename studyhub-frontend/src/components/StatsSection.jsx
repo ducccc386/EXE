@@ -1,8 +1,8 @@
 const stats = [
-  { value: "870", label: "Expert tutors" },
-  { value: "20,000+", label: "Hours tutored" },
-  { value: "298", label: "Subject and courses" },
-  { value: "72,924", label: "Active students" },
+  { value: "870", label: "Gia sư chuyên nghiệp" },
+  { value: "20.000+", label: "Giờ dạy học" },
+  { value: "298", label: "Môn học & khóa học" },
+  { value: "72.924", label: "Học viên đang học" },
 ];
 
 export default function StatsSection() {
