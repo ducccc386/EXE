@@ -145,3 +145,18 @@ ALTER TABLE TutorProfiles ADD
     identity_card_number VARCHAR(20); -- Dùng cho Face Matching
 
 	SELECT * FROM TutorProfiles
+
+-- 1. Admin
+INSERT INTO Users (email, password, full_name, phone, role_id, status)
+VALUES ('admin@studymate.com', 'admin123', N'Quản trị viên', '0901112223', 1, 'ACTIVE');
+
+-- 2. Gia sư (Tutor)
+INSERT INTO Users (email, password, full_name, phone, latitude, longitude, role_id, status)
+VALUES ('teresa.t@email.com', 'tutor456', N'Dr. Teresa Thompson PhD', '0988777666', 10.762622, 106.660172, 2, 'ACTIVE');
+
+-- 3. Phụ huynh (Parent)
+INSERT INTO Users (email, password, full_name, phone, latitude, longitude, role_id, status)
+VALUES ('lan.nguyen@gmail.com', 'parent789', N'Nguyễn Thị Lan', '0912345678', 10.823099, 106.629664, 3, 'ACTIVE');
+
+INSERT INTO TutorProfiles (user_id, bio, education, hourly_rate_min, is_verified, average_rating)
+VALUES (2, N'Chuyên gia luyện thi IELTS với 10 năm kinh nghiệm tại nước ngoài.', N'Oxford University', 500000, 1, 4.9);

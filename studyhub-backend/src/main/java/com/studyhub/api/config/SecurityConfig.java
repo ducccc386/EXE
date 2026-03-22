@@ -12,25 +12,31 @@ import org.springframework.security.config.Customizer;
 
 @Configuration
 @EnableWebSecurity
-public class SecutiryConfig {
+public class SecurityConfig {
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Tắt để gọi API từ React dễ dàng
+                // 1. Cấu hình CORS để React truy cập được
+                .cors(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
+
                 .authorizeHttpRequests(auth -> auth
-                        // Các API công khai
+                        // API đăng ký/đăng nhập phải mở hoàn toàn
                         .requestMatchers("/api/auth/**").permitAll()
+
+                        // Các API xem danh sách (cho HomePage)
                         .requestMatchers(HttpMethod.GET, "/api/tutors/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/subjects/**").permitAll()
 
-                        // Các API cần đăng nhập (Ví dụ)
-                        .requestMatchers("/api/tutor-profile/**").hasRole("TUTOR")
-                        .requestMatchers("/api/jobs/**").hasAnyRole("PARENT", "ADMIN")
+                        // Phân quyền dựa trên Authority (Khớp trực tiếp với role_name trong SQL)
+                        .requestMatchers("/api/tutor-profile/**").hasAuthority("TUTOR")
+                        .requestMatchers("/api/jobs/**").hasAnyAuthority("PARENT", "ADMIN")
+                        .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
 
-                        // Tất cả các request còn lại phải đăng nhập
                         .anyRequest().authenticated())
-                // Tạm thời dùng HTTP Basic để test trên Postman hoặc disable nếu chưa làm Login
-                // xong
+                // Vì bạn chưa dùng JWT hoàn chỉnh, tạm thời dùng session hoặc permitAll để test
+                // flow
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
@@ -38,7 +44,7 @@ public class SecutiryConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // Bắt buộc phải có cái này để mã hóa mật khẩu khi lưu vào DB
-        return new BCryptPasswordEncoder();
+        // Đổi từ BCrypt sang NoOp
+        return org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance();
     }
 }
