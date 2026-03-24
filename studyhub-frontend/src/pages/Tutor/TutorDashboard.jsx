@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../../components/Navbar";
+import TutorProfile from "../../pages/Tutor/TutorProfile"; // Tích hợp hồ sơ năng lực
 
 export default function TutorDashboard() {
     const [activeTab, setActiveTab] = useState('dashboard');
@@ -22,7 +23,7 @@ export default function TutorDashboard() {
             <Navbar />
 
             <div className="flex flex-1 pt-[116px]">
-                {/* SIDEBAR GIA SƯ - ĐỒNG BỘ STYLE VỚI PARENT */}
+                {/* SIDEBAR GIA SƯ */}
                 <aside className="w-72 bg-black border-r border-white/5 p-6 flex flex-col sticky top-[116px] h-[calc(100vh-116px)]">
                     <div className="mb-10 px-2">
                         <p className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.3em] mb-2 italic">Tutor Pro</p>
@@ -45,8 +46,8 @@ export default function TutorDashboard() {
                         ))}
                     </nav>
 
-                    {/* Quick Earnings View */}
-                    <div className="bg-zinc-900/50 p-6 rounded-[2.5rem] border border-white/5 mt-auto shadow-2xl">
+                    {/* Quick Wallet View */}
+                    <div className="bg-zinc-900/50 p-6 rounded-[2.5rem] border border-indigo-500/20 mt-auto shadow-2xl">
                         <p className="text-[9px] font-black text-indigo-400 uppercase tracking-widest mb-1 italic text-center">Số dư khả dụng</p>
                         <p className="text-2xl font-black text-white italic tracking-tighter text-center">12.500.000đ</p>
                     </div>
@@ -55,7 +56,7 @@ export default function TutorDashboard() {
                 {/* MAIN CONTENT AREA */}
                 <main className="flex-1 p-12 overflow-y-auto bg-gradient-to-br from-black to-indigo-950/5">
 
-                    {/* 1. TAB DASHBOARD (TỔNG QUAN) */}
+                    {/* 1. TAB DASHBOARD (TỔNG QUAN & HÀNH ĐỘNG CẤP BÁCH) */}
                     {activeTab === 'dashboard' && (
                         <div className="animate-in fade-in duration-700">
                             <header className="mb-12 flex justify-between items-end">
@@ -63,7 +64,7 @@ export default function TutorDashboard() {
                                     <h1 className="text-5xl font-black italic uppercase tracking-tighter text-white leading-none">
                                         Chào, <span className="text-indigo-500 underline decoration-zinc-800 underline-offset-8">Dr. Teresa Thompson PhD</span>
                                     </h1>
-                                    <p className="text-zinc-500 text-[10px] font-black uppercase tracking-[0.4em] mt-4 italic font-serif">Hệ thống đang vận hành ổn định • 23/03/2026</p>
+                                    <p className="text-zinc-500 text-[10px] font-black uppercase tracking-[0.4em] mt-4 italic font-serif">Hệ thống đang vận hành ổn định • 24/03/2026</p>
                                 </div>
                                 <div className="bg-zinc-900 p-5 rounded-[2rem] border border-white/5 flex items-center gap-4 shadow-xl">
                                     <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
@@ -86,7 +87,7 @@ export default function TutorDashboard() {
                                 </div>
                             </div>
 
-                            {/* LỊCH DẠY & HÀNH ĐỘNG CẤP BÁCH */}
+                            {/* CÔNG VIỆC CẦN XỬ LÝ NGAY (ESCROW ACTION) */}
                             <div className="bg-zinc-900/80 rounded-[3.5rem] border border-white/5 shadow-2xl overflow-hidden backdrop-blur-md">
                                 <div className="p-8 border-b border-white/5 bg-white/5 flex justify-between items-center">
                                     <p className="text-[10px] font-black text-white uppercase tracking-[0.3em] italic">Công việc cần xử lý ngay</p>
@@ -105,7 +106,7 @@ export default function TutorDashboard() {
                                             {!isReported ? (
                                                 <button
                                                     onClick={handleReportSession}
-                                                    className="bg-indigo-600 hover:bg-white hover:text-indigo-600 text-white font-black px-12 py-5 rounded-[2rem] text-[11px] uppercase tracking-[0.2em] transition-all shadow-2xl shadow-indigo-950/50 active:scale-95 italic border-2 border-indigo-600"
+                                                    className="bg-indigo-600 hover:bg-white hover:text-indigo-600 text-white font-black px-12 py-5 rounded-[2rem] text-[11px] uppercase tracking-[0.2em] transition-all shadow-2xl active:scale-95 italic border-2 border-indigo-600"
                                                 >
                                                     Báo cáo hoàn thành
                                                 </button>
@@ -121,7 +122,52 @@ export default function TutorDashboard() {
                         </div>
                     )}
 
-                    {/* 2. TAB THU NHẬP (QUAN TRỌNG CHO ESCROW) */}
+                    {/* 2. TAB LỊCH DẠY & LỚP HỌC (DETAIL) */}
+                    {activeTab === 'schedule' && (
+                        <div className="animate-in fade-in slide-in-from-right-4 duration-700 space-y-10">
+                            <header className="flex justify-between items-end">
+                                <div>
+                                    <h1 className="text-5xl font-black italic uppercase tracking-tighter leading-none text-white">
+                                        Class <span className="text-indigo-500 font-serif underline decoration-zinc-800 underline-offset-8">Schedules</span>
+                                    </h1>
+                                    <p className="text-zinc-500 text-[10px] font-black uppercase tracking-[0.4em] mt-4 italic">Quản lý thời gian và lớp học trực tuyến</p>
+                                </div>
+                            </header>
+
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                                {/* DANH SÁCH LỚP */}
+                                <div className="lg:col-span-4 space-y-6">
+                                    <h3 className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.3em] italic ml-4">Lớp đang đảm nhận</h3>
+                                    <div className="bg-zinc-900 border-l-4 border-indigo-500 p-6 rounded-r-[2.5rem] hover:bg-zinc-800 transition-all shadow-xl">
+                                        <p className="text-[9px] font-black text-zinc-600 uppercase mb-1">SM-88201 • 8/12 BUỔI</p>
+                                        <h4 className="text-xl font-black italic uppercase text-white">Toán Nâng Cao 10</h4>
+                                        <p className="text-sm italic text-zinc-400 mt-2">HV: Thế Anh</p>
+                                    </div>
+                                    <button className="w-full py-6 border-2 border-dashed border-white/5 rounded-[2.5rem] text-zinc-700 font-black uppercase text-[10px] tracking-widest hover:border-indigo-500/50 hover:text-indigo-500 transition-all italic">+ Đăng ký thêm lớp mới</button>
+                                </div>
+
+                                {/* TIMELINE CHI TIẾT */}
+                                <div className="lg:col-span-8 bg-zinc-900/40 border border-white/5 rounded-[3.5rem] p-10 shadow-2xl relative backdrop-blur-sm">
+                                    <div className="flex items-center gap-6 p-8 rounded-[2.5rem] bg-indigo-600 shadow-2xl shadow-indigo-900/40 transition-all mb-4">
+                                        <div className="text-center min-w-[80px] border-r border-white/10 pr-6">
+                                            <p className="text-[10px] font-black uppercase text-indigo-200">Hôm nay</p>
+                                            <p className="text-2xl font-black italic font-mono tracking-tighter">24/03</p>
+                                        </div>
+                                        <div className="flex-1">
+                                            <h4 className="text-lg font-black italic uppercase tracking-tight text-white leading-none mb-1">Toán 10 - Thế Anh</h4>
+                                            <p className="text-[9px] font-bold uppercase tracking-widest text-indigo-100">19:00 - 21:00 • Online Class</p>
+                                        </div>
+                                        <button className="bg-white text-indigo-600 font-black px-8 py-4 rounded-2xl text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all italic">
+                                            Vào dạy ngay
+                                        </button>
+                                    </div>
+                                    <p className="text-[9px] text-center text-zinc-600 font-black uppercase tracking-[0.3em] mt-6 italic">Cuộn xuống để xem lịch các ngày tiếp theo</p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 3. TAB THU NHẬP (ESCROW SYSTEM) */}
                     {activeTab === 'earnings' && (
                         <div className="animate-in slide-in-from-right-4 duration-700">
                             <header className="mb-12 flex justify-between items-end">
@@ -137,40 +183,28 @@ export default function TutorDashboard() {
                             </header>
 
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-                                {/* Tiền khả dụng */}
-                                <div className="bg-zinc-900 p-10 rounded-[3.5rem] border border-white/5 shadow-2xl relative group overflow-hidden">
-                                    <div className="absolute top-0 right-0 p-8 opacity-10 text-7xl group-hover:scale-110 transition-transform">💰</div>
+                                <div className="bg-zinc-900 p-10 rounded-[3.5rem] border border-white/5 shadow-2xl relative group">
                                     <p className="text-[11px] font-black text-zinc-500 uppercase mb-3 tracking-widest italic font-serif">Số dư khả dụng</p>
                                     <p className="text-5xl font-black text-white tracking-tighter italic font-mono">12.500.000đ</p>
                                 </div>
-
-                                {/* Tiền đang treo (Escrow) */}
-                                <div className="bg-zinc-900 p-10 rounded-[3.5rem] border border-indigo-500/20 shadow-2xl relative group overflow-hidden">
-                                    <div className="absolute top-0 right-0 p-8 opacity-10 text-7xl group-hover:rotate-12 transition-transform italic">⏳</div>
+                                <div className="bg-zinc-900 p-10 rounded-[3.5rem] border border-indigo-500/20 shadow-2xl relative group">
                                     <p className="text-[11px] font-black text-indigo-400 uppercase mb-3 tracking-widest italic font-serif">Đang ký quỹ (Escrow)</p>
                                     <p className="text-5xl font-black text-zinc-400 tracking-tighter italic font-mono">2.500.000đ</p>
-                                    <p className="text-[9px] text-zinc-600 mt-4 font-bold uppercase tracking-tighter italic font-sans leading-relaxed">
-                                        * Phụ huynh đã nạp tiền. Tiền sẽ về ví sau khi bạn dạy xong & được xác nhận.
-                                    </p>
                                 </div>
-
-                                {/* Tổng tháng này */}
-                                <div className="bg-zinc-900 p-10 rounded-[3.5rem] border border-white/5 shadow-2xl relative group overflow-hidden">
-                                    <div className="absolute top-0 right-0 p-8 opacity-10 text-7xl group-hover:scale-110 transition-transform">📈</div>
+                                <div className="bg-zinc-900 p-10 rounded-[3.5rem] border border-white/5 shadow-2xl relative group">
                                     <p className="text-[11px] font-black text-green-500 uppercase mb-3 tracking-widest italic font-serif">Thu nhập tháng 03</p>
                                     <p className="text-5xl font-black text-green-500 tracking-tighter italic font-mono">15.000.000đ</p>
                                 </div>
                             </div>
 
-                            {/* BẢNG LỊCH SỬ GIẢI NGÂN CHI TIẾT */}
                             <div className="bg-zinc-900/80 rounded-[3.5rem] border border-white/5 shadow-2xl overflow-hidden backdrop-blur-md">
-                                <div className="p-8 border-b border-white/5 bg-white/5 flex justify-between items-center">
+                                <div className="p-8 border-b border-white/5 bg-white/5">
                                     <p className="text-[10px] font-black text-white uppercase tracking-[0.3em] italic">Tiến độ giải ngân hợp đồng</p>
                                 </div>
-                                <div className="p-10 space-y-6">
+                                <div className="p-10">
                                     <div className="flex justify-between items-center p-8 bg-black/50 rounded-[2.5rem] border border-white/5 hover:border-indigo-500/30 transition-all group">
                                         <div className="flex items-center gap-8">
-                                            <div className="w-16 h-16 bg-indigo-600/10 rounded-3xl flex items-center justify-center text-3xl shadow-inner group-hover:rotate-6 transition-transform">🎯</div>
+                                            <div className="w-16 h-16 bg-indigo-600/10 rounded-3xl flex items-center justify-center text-3xl">🎯</div>
                                             <div>
                                                 <p className="text-xl font-black text-white tracking-tight italic uppercase font-serif">Toán 10 - Thế Anh</p>
                                                 <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest italic font-sans">Mã HĐ: #SM-88201 • Đã dạy 8/10 buổi</p>
@@ -178,8 +212,8 @@ export default function TutorDashboard() {
                                         </div>
                                         <div className="text-right">
                                             <p className="text-2xl font-black text-indigo-400 italic mb-1 font-mono tracking-tighter">2.500.000đ</p>
-                                            <span className="text-[9px] font-black bg-orange-600/10 text-orange-500 px-4 py-1.5 rounded-full border border-orange-500/20 uppercase italic tracking-tighter">
-                                                Chờ PH xác nhận buổi 8
+                                            <span className={`text-[9px] font-black px-4 py-1.5 rounded-full border uppercase italic tracking-tighter ${isReported ? 'bg-green-600/10 text-green-500 border-green-500/20' : 'bg-orange-600/10 text-orange-500 border-orange-500/20'}`}>
+                                                {isReported ? 'Đã báo cáo - Chờ giải ngân' : 'Chờ PH xác nhận buổi 8'}
                                             </span>
                                         </div>
                                     </div>
@@ -188,14 +222,9 @@ export default function TutorDashboard() {
                         </div>
                     )}
 
-                    {/* CÁC TAB CÒN LẠI (PLACEHOLDER GIỐNG PARENT) */}
-                    {['schedule', 'profile'].includes(activeTab) && (
-                        <div className="flex flex-col items-center justify-center h-[60vh] text-zinc-800 italic group">
-                            <span className="text-[120px] mb-8 opacity-20 group-hover:scale-110 transition-transform duration-700">⚙️</span>
-                            <h3 className="text-2xl font-black uppercase tracking-[0.4em] mb-3 text-white opacity-20 italic font-serif">Module {activeTab}</h3>
-                            <p className="text-[10px] font-black uppercase tracking-[0.5em] text-zinc-700">Dữ liệu đang được đồng bộ hóa...</p>
-                        </div>
-                    )}
+                    {/* 4. TAB HỒ SƠ NĂNG LỰC (INTEGRATED COMPONENT) */}
+                    {activeTab === 'profile' && <TutorProfile />}
+
                 </main>
             </div>
         </div>
