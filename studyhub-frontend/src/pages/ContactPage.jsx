@@ -97,8 +97,8 @@ export default function ContactPage() {
 
           {/* Contact Form */}
           <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 md:p-10">
-            <h2 className="text-2xl font-extrabold text-gray-900 mb-2">Send Us a Message</h2>
-            <p className="text-gray-500 text-sm mb-8">Fill in the form and we'll get back to you as soon as possible.</p>
+            <h2 className="text-2xl font-extrabold text-gray-900 mb-2">Gửi tin nhắn cho chúng tôi</h2>
+            <p className="text-gray-500 text-sm mb-8">Điền thông tin vào biểu mẫu dưới đây và chúng tôi sẽ phản hồi sớm nhất có thể.</p>
 
             {submitted ? (
               <div className="text-center py-12">
@@ -107,23 +107,23 @@ export default function ContactPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Message Sent!</h3>
-                <p className="text-gray-500 text-sm">Thanks for reaching out. We'll reply within 24 hours.</p>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Đã gửi tin nhắn!</h3>
+                <p className="text-gray-500 text-sm">Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi trong vòng 24 giờ.</p>
                 <button onClick={() => setSubmitted(false)} className="mt-6 text-blue-600 font-semibold text-sm hover:text-orange-500 transition-colors">
-                  Send another message →
+                  Gửi tin nhắn khác →
                 </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">Full Name</label>
+                    <label className="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">Họ và tên</label>
                     <input type="text" required placeholder="Nguyễn Văn A" value={form.name}
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
                       className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all" />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">Email Address</label>
+                    <label className="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">Địa chỉ Email</label>
                     <input type="email" required placeholder="nguyenvana@email.com" value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
                       className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all" />
@@ -131,20 +131,20 @@ export default function ContactPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">Subject</label>
+                  <label className="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">Chủ đề</label>
                   <select value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })}
                     className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all">
-                    <option value="">Select a topic...</option>
-                    <option>General Inquiry</option>
-                    <option>Become a Tutor</option>
-                    <option>Partnership</option>
-                    <option>Technical Support</option>
-                    <option>Billing & Payment</option>
+                    <option value="">Chọn một chủ đề...</option>
+                    <option>Thắc mắc chung</option>
+                    <option>Trở thành Gia sư</option>
+                    <option>Hợp tác</option>
+                    <option>Hỗ trợ kỹ thuật</option>
+                    <option>Thanh toán & Hóa đơn</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">Message</label>
+                  <label className="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">Tin nhắn</label>
                   <textarea required rows={5} placeholder="Viết nội dung tin nhắn..." value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all resize-none" />
@@ -155,7 +155,7 @@ export default function ContactPage() {
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                   </svg>
-                  Send Message
+                  Gửi tin nhắn
                 </button>
               </form>
             )}

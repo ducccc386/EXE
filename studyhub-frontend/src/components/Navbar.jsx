@@ -4,7 +4,7 @@ import mainLogo from '../assets/studyhub.jpg';
 
 const navLinks = [
   { label: "Trang chủ", to: "/" },
-  { label: "Tìm gia sư", to: "/tutors" },
+  { label: "Tra cứu gia sư", to: "/tutors" },
   { label: "Lịch học", to: "/booking" },
   { label: "Tin tức", to: "/news" },
   { label: "Liên hệ", to: "/contact" },

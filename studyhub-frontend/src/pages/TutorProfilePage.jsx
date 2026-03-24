@@ -280,70 +280,10 @@ export default function TutorProfilePage() {
               </div>
             </div>
 
-            {/* Calendar */}
-            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
-              <h3 className="font-extrabold text-gray-900 mb-2">Chọn lịch học</h3>
-              <p className="text-gray-500 text-sm mb-6">Nhấn vào khung giờ trống để chọn thời gian học phù hợp với bạn</p>
-              <AvailabilityCalendar calendar={tutor.calendar} onSelect={setSelectedSlot} />
-              {selectedSlot && (
-                <div className="mt-4 flex items-center gap-2 text-sm text-emerald-600 font-semibold bg-emerald-50 px-4 py-3 rounded-xl border border-emerald-200">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Đã chọn: {selectedSlot.day?.toUpperCase()} lúc {selectedSlot.time}
-                </div>
-              )}
-            </div>
+          
           </div>
 
-          {/* ── Right: Booking Sidebar ─── */}
-          <div className="w-full lg:w-80 flex-shrink-0">
-            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 sticky top-24">
-              <div className="text-center mb-6">
-                <p className="text-3xl font-extrabold text-gray-900">{formatPrice(tutor.pricePerHour)}</p>
-                <p className="text-gray-400 text-sm">/giờ học</p>
-              </div>
-
-              {/* Escrow info */}
-              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-5">
-                <div className="flex items-start gap-2">
-                  <svg className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                  </svg>
-                  <div>
-                    <p className="text-amber-700 font-bold text-xs">Thanh toán an toàn</p>
-                    <p className="text-amber-600 text-xs mt-0.5 leading-relaxed">
-                      Tiền được giữ bởi StudyHub và chỉ chuyển cho gia sư sau khi bạn xác nhận hoàn thành buổi học.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <button
-                onClick={handleBooking}
-                className={`w-full font-bold py-4 rounded-2xl transition-all text-sm ${selectedSlot
-                    ? "bg-orange-500 hover:bg-orange-600 text-white hover:shadow-xl hover:shadow-orange-200 active:scale-95"
-                    : "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  }`}
-              >
-                {selectedSlot ? "Đặt lịch ngay →" : "Chọn khung giờ trước"}
-              </button>
-              <p className="text-center text-xs text-gray-400 mt-3">Miễn phí hủy trước 24 giờ</p>
-
-              <div className="border-t border-gray-100 mt-5 pt-5 space-y-3">
-                {[
-                  ["Buổi học", "60 phút"],
-                  ["Hình thức", "Trực tuyến (Zoom/Meet)"],
-                  ["Ngôn ngữ", "Tiếng Việt"],
-                ].map(([label, val], i) => (
-                  <div key={i} className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500">{label}</span>
-                    <span className="font-semibold text-gray-800">{val}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+        
         </div>
       </div>
 
