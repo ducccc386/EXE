@@ -10,13 +10,15 @@ import TutorDashboard from "./pages/Tutor/TutorDashboard";
 import ParentDashboard from "./pages/Parent/ParentDashboard";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import MaterialsPage from "./pages/MaterialsPage";
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* ── Main Demo Flow: Home → Tutors → Profile → Booking ── */}
+        {/* ── Main Demo Flow ── */}
         <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} /> {/* Thêm dòng này */}
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/tutors" element={<TutorListingPage />} />
         <Route path="/tutors/:id" element={<TutorProfilePage />} />
         <Route path="/booking" element={<BookingDashboardPage />} />
@@ -24,7 +26,9 @@ function App() {
         {/* ── Other pages ── */}
         <Route path="/news" element={<NewsPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        {/* Thêm các route khác nếu cần */}
+        <Route path="/materials" element={<MaterialsPage />} />
+
+        {/* ── Protected dashboards ── */}
         <Route
           path="/admin/dashboard"
           element={
@@ -33,7 +37,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/tutor/dashboard"
           element={
@@ -42,7 +45,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/parent/dashboard"
           element={
@@ -51,10 +53,8 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-
       </Routes>
-    </BrowserRouter >
+    </BrowserRouter>
   );
 }
 

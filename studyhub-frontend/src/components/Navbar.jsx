@@ -8,6 +8,7 @@ const navLinks = [
   { label: "Lịch học", to: "/booking" },
   { label: "Tin tức", to: "/news" },
   { label: "Liên hệ", to: "/contact" },
+  { label: "Tài liệu học tập", to: "/materials" },
 ];
 
 export default function Navbar() {
