@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/layout/Navbar";
 
 const mockTutors = [
     { id: "GS-9901", name: "Dr. Teresa Thompson PhD", email: "teresa.t@university.edu", phone: "(+1) 123-321-1234", status: "Approved", joinDate: "2026-03-20", eKYC: true },

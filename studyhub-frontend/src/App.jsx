@@ -1,54 +1,59 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import NewsPage from "./pages/NewsPage";
-import ContactPage from "./pages/ContactPage";
-import TutorListingPage from "./pages/TutorListingPage";
-import TutorProfilePage from "./pages/TutorProfilePage";
-import BookingDashboardPage from "./pages/BookingDashboardPage";
-import LoginPage from "./pages/LoginPage";
-import TutorDashboard from "./pages/Tutor/TutorDashboard";
-import ParentDashboard from "./pages/Parent/ParentDashboard";
-import AdminDashboard from "./pages/Admin/AdminDashboard";
+import { ROUTES, ROLES } from "./constants";
 import ProtectedRoute from "./components/ProtectedRoute";
-import MaterialsPage from "./pages/MaterialsPage";
 
-function App() {
+// Pages
+import HomePage            from "./pages/HomePage";
+import LoginPage           from "./pages/LoginPage";
+import TutorListingPage    from "./pages/TutorListingPage";
+import TutorProfilePage    from "./pages/TutorProfilePage";
+import NewsPage            from "./pages/NewsPage";
+import ContactPage         from "./pages/ContactPage";
+import MaterialsPage       from "./pages/MaterialsPage";
+
+// Role dashboards
+import TutorDashboard  from "./pages/Tutor/TutorDashboard";
+import ParentDashboard from "./pages/Parent/ParentDashboard";
+import AdminDashboard  from "./pages/Admin/AdminDashboard";
+
+export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* ── Main Demo Flow ── */}
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/tutors" element={<TutorListingPage />} />
-        <Route path="/tutors/:id" element={<TutorProfilePage />} />
-        <Route path="/booking" element={<BookingDashboardPage />} />
+        {/* ── Public ── */}
+        <Route path={ROUTES.HOME}     element={<HomePage />} />
+        <Route path={ROUTES.LOGIN}    element={<LoginPage />} />
+        <Route path={ROUTES.TUTORS}   element={<TutorListingPage />} />
+        <Route path="/tutors/:id"     element={<TutorProfilePage />} />
+        <Route path={ROUTES.NEWS}     element={<NewsPage />} />
+        <Route path={ROUTES.CONTACT}  element={<ContactPage />} />
+        <Route path={ROUTES.MATERIALS} element={<MaterialsPage />} />
 
-        {/* ── Other pages ── */}
-        <Route path="/news" element={<NewsPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/materials" element={<MaterialsPage />} />
-
-        {/* ── Protected dashboards ── */}
+        {/* ── Protected: Admin ── */}
         <Route
-          path="/admin/dashboard"
+          path={ROUTES.ADMIN_DASHBOARD}
           element={
-            <ProtectedRoute allowedRoles={["ADMIN"]}>
+            <ProtectedRoute allowedRoles={[ROLES.ADMIN]}>
               <AdminDashboard />
             </ProtectedRoute>
           }
         />
+
+        {/* ── Protected: Tutor ── */}
         <Route
-          path="/tutor/dashboard"
+          path={ROUTES.TUTOR_DASHBOARD}
           element={
-            <ProtectedRoute allowedRoles={["TUTOR"]}>
+            <ProtectedRoute allowedRoles={[ROLES.TUTOR]}>
               <TutorDashboard />
             </ProtectedRoute>
           }
         />
+
+        {/* ── Protected: Parent ── */}
         <Route
-          path="/parent/dashboard"
+          path={ROUTES.PARENT_DASHBOARD}
           element={
-            <ProtectedRoute allowedRoles={["PARENT"]}>
+            <ProtectedRoute allowedRoles={[ROLES.PARENT]}>
               <ParentDashboard />
             </ProtectedRoute>
           }
@@ -57,5 +62,3 @@ function App() {
     </BrowserRouter>
   );
 }
-
-export default App;

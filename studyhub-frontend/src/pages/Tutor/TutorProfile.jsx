@@ -1,69 +1,52 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { getMyProfile } from "../../services/tutorService";
 
 export default function TutorProfile() {
-    const certifications = [
-        { title: "IELTS Academic 8.5", issuer: "", year: "2024", icon: "🇬🇧" },
-        { title: "Sư phạm Toán học", issuer: "ĐH Sư Phạm HN", year: "2022", icon: "📐" },
-        { title: "Tư duy sáng tạo", issuer: "StudyMate Academy", year: "2025", icon: "🧠" }
-    ];
+    const [profile, setProfile] = useState(null);
+    useEffect(() => { getMyProfile().then(setProfile); }, []);
+    if (!profile) return <div className="text-center py-20 text-gray-400 text-sm">Đang tải hồ sơ…</div>;
 
     return (
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-12">
-            <header className="flex justify-between items-end">
+        <div className="space-y-6">
+            <div className="flex items-end justify-between">
                 <div>
-                    <h1 className="text-5xl font-black italic uppercase tracking-tighter text-white leading-none">
-                        Expert <span className="text-indigo-500 font-serif underline decoration-zinc-800 underline-offset-8">Portfolio</span>
-                    </h1>
-                    <p className="text-zinc-500 text-[10px] font-black uppercase tracking-[0.4em] mt-4 italic">Quản lý bằng cấp và thương hiệu cá nhân</p>
+                    <h2 className="text-2xl font-extrabold text-gray-900">Hồ sơ năng lực</h2>
+                    <p className="text-sm text-gray-500 mt-1">Quản lý bằng cấp và thương hiệu cá nhân</p>
                 </div>
-                <button className="bg-indigo-600 text-white font-black px-10 py-5 rounded-[2rem] text-[10px] uppercase tracking-widest shadow-2xl hover:bg-white hover:text-indigo-600 transition-all italic">Cập nhật hồ sơ</button>
-            </header>
-
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                {/* THÔNG TIN CƠ BẢN */}
-                <div className="lg:col-span-4 space-y-6">
-                    <div className="bg-zinc-900 p-8 rounded-[3.5rem] border border-white/5 text-center relative overflow-hidden group">
-                        <div className="w-32 h-32 bg-indigo-600 rounded-[3rem] mx-auto mb-6 flex items-center justify-center text-4xl shadow-2xl group-hover:rotate-6 transition-transform">👩‍🏫</div>
-                        <h3 className="text-2xl font-black italic uppercase tracking-tight text-white">Dr. Teresa Thompson</h3>
-                        <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest mt-2 italic">Gia sư Cao cấp • 5 năm kn</p>
-
-                        <div className="mt-8 pt-8 border-t border-white/5 grid grid-cols-2 gap-4">
-                            <div>
-                                <p className="text-2xl font-black italic text-white font-mono">4.9</p>
-                                <p className="text-[8px] font-black text-zinc-600 uppercase italic tracking-widest">Rating</p>
-                            </div>
-                            <div>
-                                <p className="text-2xl font-black italic text-white font-mono">98%</p>
-                                <p className="text-[8px] font-black text-zinc-600 uppercase italic tracking-widest">Success Rate</p>
-                            </div>
+                <button className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-5 py-2.5 rounded-full text-sm transition-colors shadow-sm">Cập nhật hồ sơ</button>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div className="lg:col-span-4 space-y-4">
+                    <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm text-center">
+                        <div className="w-20 h-20 bg-blue-100 rounded-2xl mx-auto mb-4 flex items-center justify-center text-3xl">👩‍🏫</div>
+                        <h3 className="text-lg font-bold text-gray-900">{profile.fullName}</h3>
+                        <p className="text-sm text-blue-600 font-medium mt-1">{profile.role} • {profile.experience}</p>
+                        <div className="mt-5 pt-5 border-t border-gray-100 grid grid-cols-2 gap-4">
+                            <div><p className="text-2xl font-extrabold text-gray-900">{profile.rating}</p><p className="text-xs text-gray-400 font-medium mt-0.5">Đánh giá TB</p></div>
+                            <div><p className="text-2xl font-extrabold text-gray-900">{profile.successRate}%</p><p className="text-xs text-gray-400 font-medium mt-0.5">Tỷ lệ thành công</p></div>
                         </div>
                     </div>
+                    <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5">
+                        <h3 className="text-sm font-bold text-blue-800 mb-3">Triết lý giảng dạy</h3>
+                        <p className="text-sm text-blue-700 leading-relaxed">"{profile.bio}"</p>
+                    </div>
                 </div>
-
-                {/* BẰNG CẤP & CHỨNG CHỈ */}
-                <div className="lg:col-span-8 space-y-8">
-                    <h3 className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.3em] italic ml-4">Chứng chỉ & Bằng cấp đã xác minh</h3>
+                <div className="lg:col-span-8 space-y-4">
+                    <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Chứng chỉ & Bằng cấp đã xác minh</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {certifications.map((cert, idx) => (
-                            <div key={idx} className="bg-zinc-900/50 border border-white/5 p-8 rounded-[2.5rem] hover:border-indigo-500/30 transition-all flex items-center gap-6 group">
-                                <span className="text-4xl group-hover:scale-110 transition-transform">{cert.icon}</span>
+                        {profile.certifications.map((cert, idx) => (
+                            <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex items-center gap-4">
+                                <span className="text-2xl flex-shrink-0">{cert.icon}</span>
                                 <div>
-                                    <h4 className="text-lg font-black italic uppercase text-white leading-tight">{cert.title}</h4>
-                                    <p className="text-[10px] font-bold text-zinc-500 uppercase mt-1 tracking-tighter">{cert.issuer} • {cert.year}</p>
+                                    <h4 className="text-sm font-bold text-gray-900">{cert.title}</h4>
+                                    <p className="text-xs text-gray-400 mt-0.5">{cert.issuer && `${cert.issuer} • `}{cert.year}</p>
                                 </div>
+                                <svg className="w-4 h-4 text-green-500 ml-auto flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                             </div>
                         ))}
-                        <div className="border-2 border-dashed border-white/5 rounded-[2.5rem] flex items-center justify-center p-8 hover:border-indigo-500/50 cursor-pointer group transition-all">
-                            <span className="text-[10px] font-black text-zinc-700 uppercase tracking-widest group-hover:text-indigo-500">+ Thêm chứng chỉ mới</span>
-                        </div>
-                    </div>
-
-                    {/* GIỚI THIỆU BẢN THÂN */}
-                    <div className="bg-indigo-600/5 border border-indigo-500/10 p-10 rounded-[3.5rem] relative shadow-inner">
-                        <h3 className="text-sm font-black italic uppercase text-indigo-500 mb-4 tracking-tighter">Triết lý giảng dạy</h3>
-                        <p className="text-zinc-400 italic leading-relaxed text-sm">
-                            "Tôi tin rằng mỗi học sinh đều có một 'điểm chạm' tư duy riêng. Thay vì ép buộc theo khuôn mẫu, tôi tập trung vào việc kích thích sự tò mò và ứng dụng AI để cá nhân hóa lộ trình học tập, giúp học sinh không chỉ giỏi kiến thức mà còn thành thạo kỹ năng tự học."
-                        </p>
+                        <button className="border-2 border-dashed border-gray-200 rounded-2xl flex items-center justify-center p-5 hover:border-blue-300 cursor-pointer group transition-all">
+                            <span className="text-sm font-semibold text-gray-400 group-hover:text-blue-500">+ Thêm chứng chỉ mới</span>
+                        </button>
                     </div>
                 </div>
             </div>

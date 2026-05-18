@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import Navbar from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer";
 import { VerifiedBadge, StarRating, Avatar, SubjectBadge, formatPrice } from "../components/ui";
 import { getTutorById } from "../data/tutors";
 
@@ -46,7 +46,7 @@ function AvailabilityCalendar({ calendar, onSelect }) {
                       onClick={() => handleSlot(key, time)}
                       className={`w-full py-1.5 rounded-xl text-xs font-bold transition-all ${isSelected
                           ? "bg-orange-500 text-white shadow-md shadow-orange-200"
-                          : "bg-blue-50 text-blue-600 hover:bg-blue-100"
+                          : "bg-blue-50 text-orange-500 hover:bg-blue-100"
                         }`}
                     >
                       {time}
@@ -120,7 +120,7 @@ export default function TutorProfilePage() {
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-6 pt-6">
         <nav className="flex items-center gap-2 text-sm text-gray-400 mb-6">
-          <button onClick={() => navigate("/tutors")} className="hover:text-blue-600 transition-colors">Danh sách gia sư</button>
+          <button onClick={() => navigate("/tutors")} className="hover:text-orange-500 transition-colors">Danh sách gia sư</button>
           <span>/</span>
           <span className="text-gray-700 font-medium">{tutor.name}</span>
         </nav>
@@ -179,7 +179,7 @@ export default function TutorProfilePage() {
                     key={tab.key}
                     onClick={() => setActiveTab(tab.key)}
                     className={`flex-1 py-4 text-sm font-bold transition-colors ${activeTab === tab.key
-                        ? "text-blue-600 border-b-2 border-blue-600"
+                        ? "text-orange-500 border-b-2 border-blue-600"
                         : "text-gray-500 hover:text-gray-800"
                       }`}
                   >
@@ -234,7 +234,7 @@ export default function TutorProfilePage() {
                       <div className="absolute inset-0 bg-black/20" />
                       {/* Play button */}
                       <div className="relative z-10 w-20 h-20 bg-white/90 rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
-                        <svg className="w-8 h-8 text-blue-600 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-8 h-8 text-orange-500 ml-1" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M8 5v14l11-7z" />
                         </svg>
                       </div>

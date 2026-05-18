@@ -1,205 +1,193 @@
-import React, { useState } from "react";
-import Navbar from "../../components/Navbar";
-// Giữ nguyên các sub-pages quan trọng của bạn
+import React, { useState, useEffect } from "react";
+import Navbar from "../../components/layout/Navbar";
 import AdminEkycApproval from "./AdminEkycApproval";
 import AdminJobMatching from "./AdminJobMatching";
+import { getAdminStats, getUsers } from "../../services/adminService";
 import AdminFinance from "./AdminFinance";
 
+const LayoutIcon = () => <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h4a1 1 0 011 1v5a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10-3a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1v-7z" /></svg>;
+const ShieldIcon = () => <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>;
+const BoltIcon = () => <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>;
+const WalletIcon = () => <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z" /></svg>;
+const UsersIcon = () => <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>;
+
+const adminMenu = [
+  { id: 'dashboard', label: 'Tổng quan', Icon: LayoutIcon },
+  { id: 'ekyc', label: 'Duyệt hồ sơ eKYC', Icon: ShieldIcon },
+  { id: 'jobs', label: 'Perfect Match', Icon: BoltIcon },
+  { id: 'finance', label: 'Thanh toán Escrow', Icon: WalletIcon },
+  { id: 'users', label: 'Quản lý người dùng', Icon: UsersIcon },
+];
+
 export default function AdminDashboard() {
-    const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [users, setUsers] = useState([]);
+  useEffect(() => { getUsers().then(setUsers); }, []);
 
-    // Mock Data cho phần Quản lý người dùng (Đúng quy tắc định danh của bạn)
-    const mockUsers = [
-        { id: "GS-9901", name: "Dr. Teresa Thompson PhD", email: "teresa.t@university.edu", phone: "(+1) 123-321-1234", role: "Tutor", status: "Approved", eKYC: true },
-        { id: "PH-2024", name: "Nguyễn Văn Tú", email: "tu.nguyen@gmail.com", phone: "(+84) 901-234-567", role: "Parent", status: "Active", eKYC: false },
-        { id: "GS-9905", name: "Somesh Great", email: "somesh.great@company.com", phone: "(+91) 987-654-3210", role: "Tutor", status: "Pending", eKYC: false },
-    ];
-
-    const adminMenu = [
-        { id: 'dashboard', label: 'Tổng quan hệ thống', icon: '📊' },
-        { id: 'ekyc', label: 'Duyệt hồ sơ eKYC', icon: '🛡️' },
-        { id: 'jobs', label: 'The Perfect Match', icon: '🎯' },
-        { id: 'finance', label: 'Thanh toán Escrow', icon: '💸' },
-        { id: 'users', label: 'Quản lý người dùng', icon: '👥' },
-    ];
-
-    return (
-        <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col font-sans selection:bg-blue-500/30">
-            <Navbar />
-
-            <div className="flex flex-1 pt-[116px]">
-                {/* SIDEBAR SIÊU CẤP - GIỮ NGUYÊN */}
-                <aside className="w-80 bg-slate-900/40 border-r border-white/5 p-8 sticky top-[116px] h-[calc(100vh-116px)] flex flex-col shadow-2xl backdrop-blur-xl z-20">
-                    <div className="mb-10 px-2">
-                        <p className="text-[10px] font-black text-blue-500 uppercase tracking-[0.4em] mb-1 italic">Control Center</p>
-                        <h2 className="text-xl font-black text-white tracking-tighter uppercase italic">StudyMate <span className="text-slate-500">HQ</span></h2>
-                    </div>
-
-                    <nav className="space-y-3 flex-1">
-                        {adminMenu.map((item) => (
-                            <button
-                                key={item.id}
-                                onClick={() => setActiveTab(item.id)}
-                                className={`w-full flex items-center gap-4 px-6 py-4 rounded-[1.5rem] font-bold transition-all text-sm group ${activeTab === item.id
-                                    ? "bg-blue-600 text-white shadow-2xl shadow-blue-900/40 translate-x-2"
-                                    : "text-slate-500 hover:bg-white/5 hover:text-slate-200"
-                                    }`}
-                            >
-                                <span className={`text-xl transition-transform group-hover:scale-110 ${activeTab === item.id ? 'animate-pulse' : ''}`}>
-                                    {item.icon}
-                                </span>
-                                <span className="tracking-tight">{item.label}</span>
-                            </button>
-                        ))}
-                    </nav>
-
-                    {/* Trạng thái Server - GIỮ NGUYÊN */}
-                    <div className="bg-slate-950/50 p-6 rounded-[2rem] border border-white/5 mt-auto">
-                        <div className="flex items-center justify-between mb-3">
-                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Server Health</p>
-                            <span className="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
-                        </div>
-                        <div className="space-y-2">
-                            <div className="flex justify-between text-[10px] font-bold">
-                                <span className="text-slate-500 uppercase">Uptime</span>
-                                <span className="text-green-400">99.9%</span>
-                            </div>
-                            <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden">
-                                <div className="bg-green-500 h-full w-[99%]"></div>
-                            </div>
-                        </div>
-                    </div>
-                </aside>
-
-                {/* MAIN CONTENT AREA */}
-                <main className="flex-1 p-12 overflow-y-auto bg-gradient-to-br from-transparent to-blue-900/5">
-
-                    {/* TAB: DASHBOARD TỔNG QUAN - GIỮ NGUYÊN */}
-                    {activeTab === 'dashboard' && (
-                        <div className="animate-in fade-in zoom-in-95 duration-500">
-                            <header className="mb-12">
-                                <h1 className="text-6xl font-black tracking-tighter text-white uppercase italic leading-none">
-                                    Morning, <span className="text-blue-600">Admin</span>
-                                </h1>
-                                <p className="text-slate-500 text-sm font-bold mt-4 tracking-[0.2em] uppercase opacity-70 border-l-2 border-blue-600 pl-4">
-                                    Hệ thống đang vận hành với 3 node ổn định
-                                </p>
-                            </header>
-
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-                                {[
-                                    { label: 'Người dùng', val: '+128', color: 'text-blue-500', icon: '📈' },
-                                    { label: 'Chờ duyệt eKYC', val: '15', color: 'text-orange-500', icon: '🛡️' },
-                                    { label: 'Lớp cần Match', val: '01', color: 'text-green-500', icon: '🎯' },
-                                    { label: 'Tiền ký quỹ', val: '5.5M', color: 'text-purple-500', icon: '💰' },
-                                ].map((stat, i) => (
-                                    <div key={i} className="bg-slate-900/50 backdrop-blur-sm p-8 rounded-[2.5rem] border border-white/5 hover:border-blue-500/30 transition-all group">
-                                        <div className="flex justify-between items-start mb-4">
-                                            <span className="text-2xl">{stat.icon}</span>
-                                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{stat.label}</span>
-                                        </div>
-                                        <p className={`text-4xl font-black ${stat.color} group-hover:scale-105 transition-transform origin-left tracking-tighter`}>{stat.val}</p>
-                                    </div>
-                                ))}
-                            </div>
-
-                            <div className="bg-slate-900/80 rounded-[3rem] border border-white/5 shadow-2xl overflow-hidden backdrop-blur-md">
-                                <div className="p-10 border-b border-white/5 flex justify-between items-center">
-                                    <div>
-                                        <h2 className="font-black text-2xl text-white tracking-tight uppercase italic">Hàng đợi ưu tiên</h2>
-                                        <p className="text-xs text-slate-500 font-bold mt-1">Các yêu cầu cần xử lý ngay lập tức</p>
-                                    </div>
-                                    <button onClick={() => setActiveTab('jobs')} className="bg-white text-black text-[10px] font-black px-8 py-4 rounded-2xl hover:bg-blue-600 hover:text-white transition-all uppercase tracking-widest">
-                                        Mở trình Matching
-                                    </button>
-                                </div>
-                                <div className="p-4">
-                                    <div className="bg-slate-950/50 rounded-3xl p-8 flex items-center justify-between border border-white/5 hover:bg-white/5 transition-all cursor-pointer" onClick={() => setActiveTab('ekyc')}>
-                                        <div className="flex items-center gap-6">
-                                            <div className="w-12 h-12 bg-orange-500/20 rounded-2xl flex items-center justify-center text-xl text-orange-500">🛡️</div>
-                                            <div>
-                                                <p className="font-black text-white text-lg tracking-tight uppercase">Yêu cầu duyệt eKYC mới</p>
-                                                <p className="text-xs text-slate-500 font-bold tracking-widest uppercase">Gia sư: Đặng Tuấn • 95% Match • Vừa xong</p>
-                                            </div>
-                                        </div>
-                                        <span className="text-blue-500 font-black text-[10px] tracking-widest uppercase group-hover:underline">Xử lý ngay →</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* SWITCH CASE CHO CÁC SUB-PAGES CŨ - GIỮ NGUYÊN */}
-                    {activeTab === 'ekyc' && <AdminEkycApproval />}
-                    {activeTab === 'jobs' && <AdminJobMatching />}
-                    {activeTab === 'finance' && <AdminFinance />}
-
-                    {/* TÍCH HỢP: QUẢN LÝ NGƯỜI DÙNG VÀO TAB USERS */}
-                    {activeTab === 'users' && (
-                        <div className="animate-in fade-in slide-in-from-right-4 duration-500">
-                            <header className="mb-10 flex justify-between items-end">
-                                <div>
-                                    <h2 className="text-4xl font-black italic uppercase tracking-tighter text-white">User <span className="text-blue-500">Management</span></h2>
-                                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.3em] mt-2 italic">Cơ sở dữ liệu tập trung v3.0</p>
-                                </div>
-                                <div className="flex gap-4">
-                                    <input type="text" placeholder="Tìm ID: GS-XXXX..." className="bg-slate-900 border border-white/5 rounded-2xl px-6 py-4 text-xs font-mono text-blue-400 focus:outline-none focus:border-blue-500/50 w-64" />
-                                    <button className="bg-blue-600 text-white font-black px-8 py-4 rounded-2xl text-[10px] uppercase tracking-widest hover:bg-white hover:text-blue-600 transition-all italic">Xuất CSV</button>
-                                </div>
-                            </header>
-
-                            <div className="bg-slate-900/80 rounded-[3rem] border border-white/5 overflow-hidden shadow-2xl backdrop-blur-md">
-                                <table className="w-full text-left border-collapse">
-                                    <thead>
-                                        <tr className="border-b border-white/5 bg-white/5">
-                                            <th className="p-8 text-[10px] font-black uppercase text-slate-500 tracking-widest italic">Thành viên / ID</th>
-                                            <th className="p-8 text-[10px] font-black uppercase text-slate-500 tracking-widest italic">Liên lạc</th>
-                                            <th className="p-8 text-[10px] font-black uppercase text-slate-500 tracking-widest italic">Vai trò</th>
-                                            <th className="p-8 text-[10px] font-black uppercase text-slate-500 tracking-widest italic">Trạng thái</th>
-                                            <th className="p-8 text-[10px] font-black uppercase text-slate-500 tracking-widest italic text-center">Thao tác</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-white/5">
-                                        {mockUsers.map((user) => (
-                                            <tr key={user.id} className="hover:bg-white/[0.02] transition-colors group">
-                                                <td className="p-8">
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center text-lg grayscale group-hover:grayscale-0">👤</div>
-                                                        <div>
-                                                            <p className="font-black text-white italic tracking-tight">{user.name}</p>
-                                                            <div className="flex items-center gap-2">
-                                                                <p className="text-[10px] font-mono text-blue-400/70">{user.id}</p>
-                                                                {user.eKYC && <span className="text-[7px] bg-green-500/10 text-green-500 px-1.5 py-0.5 rounded border border-green-500/20 font-black">VERIFIED</span>}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className="p-8">
-                                                    <p className="text-[11px] font-bold text-slate-400">{user.email}</p>
-                                                    <p className="text-[10px] font-mono text-slate-600 italic">{user.phone}</p>
-                                                </td>
-                                                <td className="p-8 italic font-black text-xs text-slate-500 uppercase tracking-widest">{user.role}</td>
-                                                <td className="p-8">
-                                                    <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase border tracking-tighter ${user.status === 'Approved' || user.status === 'Active' ? 'text-green-500 bg-green-500/10 border-green-500/20' : 'text-orange-500 bg-orange-500/10 border-orange-500/20'
-                                                        }`}>
-                                                        {user.status}
-                                                    </span>
-                                                </td>
-                                                <td className="p-8">
-                                                    <div className="flex justify-center gap-2">
-                                                        <button className="p-3 bg-slate-800 hover:bg-blue-600 rounded-xl transition-all border border-white/5">⚙️</button>
-                                                        <button className="p-3 bg-slate-800 hover:bg-red-600 rounded-xl transition-all border border-white/5">🗑️</button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    )}
-                </main>
+  return (
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <Navbar />
+      <div className="flex flex-1 pt-[116px]">
+        {/* SIDEBAR */}
+        <aside className="w-60 bg-white border-r border-gray-100 flex flex-col sticky top-[116px] h-[calc(100vh-116px)] shadow-sm">
+          <div className="px-5 py-5 border-b border-gray-100">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Quản trị viên</p>
+            <h2 className="text-base font-bold text-gray-900">StudyHub Admin</h2>
+          </div>
+          <nav className="flex-1 px-3 py-4 space-y-0.5">
+            {adminMenu.map(({ id, label, Icon }) => (
+              <button
+                key={id}
+                onClick={() => setActiveTab(id)}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all text-left ${
+                  activeTab === id ? "bg-blue-50 text-blue-700" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                }`}
+              >
+                <span className={activeTab === id ? "text-blue-600" : "text-gray-400"}><Icon /></span>
+                {label}
+              </button>
+            ))}
+          </nav>
+          <div className="px-4 py-4 border-t border-gray-100">
+            <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-green-50">
+              <span className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></span>
+              <div>
+                <p className="text-xs font-semibold text-green-700">Hệ thống ổn định</p>
+                <p className="text-xs text-green-500">Uptime 99.9%</p>
+              </div>
             </div>
-        </div>
-    );
+          </div>
+        </aside>
+
+        {/* MAIN CONTENT */}
+        <main className="flex-1 overflow-y-auto">
+          <div className="max-w-5xl mx-auto px-8 py-8">
+
+            {/* DASHBOARD */}
+            {activeTab === 'dashboard' && (
+              <div>
+                <div className="mb-8">
+                  <h1 className="text-2xl font-extrabold text-gray-900">Tổng quan hệ thống</h1>
+                  <p className="text-sm text-gray-500 mt-1">Chào buổi sáng, Admin — hệ thống đang vận hành ổn định.</p>
+                </div>
+
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                  {[
+                    { label: 'Người dùng mới', val: '+128', sub: 'Tuần này', color: 'text-blue-600', bg: 'bg-blue-50' },
+                    { label: 'Chờ duyệt eKYC', val: '15', sub: 'Cần xử lý', color: 'text-orange-500', bg: 'bg-orange-50' },
+                    { label: 'Lớp cần Match', val: '01', sub: 'Đang chờ', color: 'text-green-600', bg: 'bg-green-50' },
+                    { label: 'Tiền ký quỹ', val: '5.5M', sub: 'Tổng cộng', color: 'text-purple-600', bg: 'bg-purple-50' },
+                  ].map((stat, i) => (
+                    <div key={i} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-shadow">
+                      <p className="text-xs font-semibold text-gray-500 mb-2">{stat.label}</p>
+                      <p className={`text-3xl font-extrabold ${stat.color} mb-1.5`}>{stat.val}</p>
+                      <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${stat.bg} ${stat.color}`}>{stat.sub}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
+                  <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <div>
+                      <h2 className="text-base font-bold text-gray-900">Hàng đợi ưu tiên</h2>
+                      <p className="text-xs text-gray-400 mt-0.5">Các yêu cầu cần xử lý ngay</p>
+                    </div>
+                    <button onClick={() => setActiveTab('jobs')} className="text-sm font-semibold bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition-colors">
+                      Mở trình Matching
+                    </button>
+                  </div>
+                  <div className="p-4">
+                    <div
+                      onClick={() => setActiveTab('ekyc')}
+                      className="flex items-center justify-between p-4 rounded-xl border border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 bg-orange-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                          <svg className="w-4 h-4 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-gray-800">Yêu cầu duyệt eKYC mới</p>
+                          <p className="text-xs text-gray-400 mt-0.5">Gia sư: Đặng Tuấn • 95% Match • Vừa xong</p>
+                        </div>
+                      </div>
+                      <span className="text-xs font-semibold text-blue-600 group-hover:underline flex-shrink-0">Xử lý ngay →</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'ekyc' && <AdminEkycApproval />}
+            {activeTab === 'jobs' && <AdminJobMatching />}
+            {activeTab === 'finance' && <AdminFinance />}
+
+            {/* USERS */}
+            {activeTab === 'users' && (
+              <div>
+                <div className="mb-6 flex items-end justify-between">
+                  <div>
+                    <h2 className="text-2xl font-extrabold text-gray-900">Quản lý người dùng</h2>
+                    <p className="text-sm text-gray-500 mt-1">Cơ sở dữ liệu người dùng tập trung</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <input type="text" placeholder="Tìm kiếm ID hoặc tên..." className="border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300 w-56" />
+                    <button className="bg-blue-600 text-white font-semibold px-5 py-2.5 rounded-full text-sm hover:bg-blue-700 transition-colors">Xuất CSV</button>
+                  </div>
+                </div>
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                  <table className="w-full text-left">
+                    <thead className="bg-gray-50 border-b border-gray-100">
+                      <tr>
+                        {['Thành viên', 'Liên lạc', 'Vai trò', 'Trạng thái', 'Thao tác'].map(h => (
+                          <th key={h} className="px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wide">{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50">
+                      {users.map((user) => (
+                        <tr key={user.id} className="hover:bg-gray-50 transition-colors">
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-9 h-9 bg-blue-100 rounded-xl flex items-center justify-center text-sm font-bold text-blue-600 flex-shrink-0">{user.name.charAt(0)}</div>
+                              <div>
+                                <p className="text-sm font-semibold text-gray-800">{user.name}</p>
+                                <div className="flex items-center gap-1.5 mt-0.5">
+                                  <p className="text-xs text-blue-500 font-mono">{user.id}</p>
+                                  {user.eKYC && <span className="text-[10px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded border border-green-100 font-semibold">Đã xác minh</span>}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <p className="text-sm text-gray-700">{user.email}</p>
+                            <p className="text-xs text-gray-400 font-mono mt-0.5">{user.phone}</p>
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${user.role === 'Tutor' ? 'bg-blue-50 text-blue-600' : 'bg-orange-50 text-orange-600'}`}>{user.role}</span>
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${user.status === 'Approved' || user.status === 'Active' ? 'bg-green-50 text-green-600' : 'bg-amber-50 text-amber-600'}`}>{user.status}</span>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="flex gap-2">
+                              <button className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                              </button>
+                              <button className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </div>
+        </main>
+      </div>
+    </div>
+  );
 }

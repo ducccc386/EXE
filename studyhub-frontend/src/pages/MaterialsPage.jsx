@@ -1,131 +1,11 @@
-import { useState } from "react";
+import { getCurrentUser } from "../services/authService";
+import { useState, useEffect } from "react";
+import { getMaterials } from "../services/materialsService";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import Navbar from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer";
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
-const materials = [
-  {
-    id: "DOC-001",
-    title: "Giải tích – Công thức đạo hàm đầy đủ",
-    subject: "Toán", level: "Đại học", grade: "Năm 1", type: "PDF",
-    tutor: { name: "Nguyễn Thanh Tùng", initials: "NTT", avatarBg: "#f59e0b" },
-    pages: 12, downloads: 348, likes: 92,
-    previewLines: ["Đạo hàm của hàm hợp", "Quy tắc L'Hôpital", "Chuỗi Taylor & Maclaurin"],
-    tag: "Phổ biến", tagColor: "bg-amber-50 text-amber-600 border-amber-200",
-    price: null,
-  },
-  {
-    id: "DOC-002",
-    title: "IELTS Writing – Band 7+ Templates",
-    subject: "Tiếng Anh", level: "Đại học", grade: "Năm 2", type: "PDF",
-    tutor: { name: "Phạm Thị Lan", initials: "PTL", avatarBg: "#ec4899" },
-    pages: 20, downloads: 521, likes: 134,
-    previewLines: ["Task 1: Line graph template", "Task 2: Opinion essay structure", "Vocabulary for band 7+"],
-    tag: "Mới nhất", tagColor: "bg-blue-50 text-blue-600 border-blue-200",
-    price: 49000,
-  },
-  {
-    id: "DOC-003",
-    title: "React cơ bản – Slide buổi 1 đến 5",
-    subject: "Lập trình", level: "Đại học", grade: "Năm 3", type: "Slide",
-    tutor: { name: "Lê Hoàng Phúc", initials: "LHP", avatarBg: "#6366f1" },
-    pages: 45, downloads: 210, likes: 67,
-    previewLines: ["JSX & Component lifecycle", "useState & useEffect", "Props drilling vs Context"],
-    tag: "Bán chạy", tagColor: "bg-violet-50 text-violet-600 border-violet-200",
-    price: 79000,
-  },
-  {
-    id: "DOC-004",
-    title: "Vật lý – Điện từ trường tóm tắt lý thuyết",
-    subject: "Vật lý", level: "THPT", grade: "Lớp 12", type: "PDF",
-    tutor: { name: "Trần Minh Khoa", initials: "TMK", avatarBg: "#10b981" },
-    pages: 8, downloads: 183, likes: 55,
-    previewLines: ["Định luật Faraday", "Từ thông & cảm ứng điện từ", "Máy biến áp"],
-    tag: "Phổ biến", tagColor: "bg-amber-50 text-amber-600 border-amber-200",
-    price: null,
-  },
-  {
-    id: "DOC-005",
-    title: "Video giải đề Hóa hữu cơ 2024",
-    subject: "Hóa học", level: "THPT", grade: "Lớp 12", type: "Video",
-    tutor: { name: "Vũ Đức Anh", initials: "VĐA", avatarBg: "#0ea5e9" },
-    pages: null, duration: "38 phút", downloads: 97, likes: 41,
-    previewLines: ["Phản ứng este hóa", "Bài tập chuỗi chuyển hóa", "Đề minh họa THPTQG 2024"],
-    tag: "Mới nhất", tagColor: "bg-blue-50 text-blue-600 border-blue-200",
-    price: 59000,
-  },
-  {
-    id: "DOC-006",
-    title: "Văn học – Phân tích Chí Phèo chi tiết",
-    subject: "Văn học", level: "THPT", grade: "Lớp 11", type: "PDF",
-    tutor: { name: "Ngô Thị Hương", initials: "NTH", avatarBg: "#f97316" },
-    pages: 16, downloads: 265, likes: 88,
-    previewLines: ["Giới thiệu tác giả Nam Cao", "Phân tích nhân vật Chí Phèo", "Kết luận & mở rộng"],
-    tag: null, tagColor: "",
-    price: null,
-  },
-  {
-    id: "DOC-007",
-    title: "Toán 12 – Bộ đề thi thử THPTQG có đáp án",
-    subject: "Toán", level: "THPT", grade: "Lớp 12", type: "PDF",
-    tutor: { name: "Nguyễn Thanh Tùng", initials: "NTT", avatarBg: "#f59e0b" },
-    pages: 80, downloads: 412, likes: 110,
-    previewLines: ["20 đề thi thử có lời giải", "Phân dạng bài tập theo chủ đề", "Thống kê điểm theo cấu trúc đề"],
-    tag: "Bán chạy", tagColor: "bg-violet-50 text-violet-600 border-violet-200",
-    price: 99000,
-  },
-  {
-    id: "DOC-008",
-    title: "Python cho người mới – Bài tập từng bước",
-    subject: "Lập trình", level: "Đại học", grade: "Năm 1", type: "PDF",
-    tutor: { name: "Lê Hoàng Phúc", initials: "LHP", avatarBg: "#6366f1" },
-    pages: 35, downloads: 156, likes: 49,
-    previewLines: ["Cú pháp cơ bản Python", "List, Dict, Loop", "OOP & File I/O"],
-    tag: null, tagColor: "",
-    price: 39000,
-  },
-  {
-    id: "DOC-009",
-    title: "Toán lớp 5 – Ôn tập cuối kỳ",
-    subject: "Toán", level: "Tiểu học", grade: "Lớp 5", type: "PDF",
-    tutor: { name: "Nguyễn Thanh Tùng", initials: "NTT", avatarBg: "#f59e0b" },
-    pages: 10, downloads: 320, likes: 75,
-    previewLines: ["Phân số & số thập phân", "Diện tích hình học cơ bản", "Bài tập thực hành"],
-    tag: "Phổ biến", tagColor: "bg-amber-50 text-amber-600 border-amber-200",
-    price: null,
-  },
-  {
-    id: "DOC-010",
-    title: "Tiếng Anh lớp 8 – Grammar & Vocabulary",
-    subject: "Tiếng Anh", level: "THCS", grade: "Lớp 8", type: "PDF",
-    tutor: { name: "Phạm Thị Lan", initials: "PTL", avatarBg: "#ec4899" },
-    pages: 24, downloads: 198, likes: 63,
-    previewLines: ["Thì hoàn thành & tiếp diễn", "Câu điều kiện loại 1 & 2", "Từ vựng Unit 1-6"],
-    tag: "Mới nhất", tagColor: "bg-blue-50 text-blue-600 border-blue-200",
-    price: 29000,
-  },
-  {
-    id: "DOC-011",
-    title: "Hóa 9 – Tóm tắt lý thuyết hóa vô cơ",
-    subject: "Hóa học", level: "THCS", grade: "Lớp 9", type: "PDF",
-    tutor: { name: "Vũ Đức Anh", initials: "VĐA", avatarBg: "#0ea5e9" },
-    pages: 18, downloads: 144, likes: 38,
-    previewLines: ["Oxit – Axit – Bazơ – Muối", "Phản ứng hóa học cơ bản", "Bảng tính tan"],
-    tag: null, tagColor: "",
-    price: null,
-  },
-  {
-    id: "DOC-012",
-    title: "Toán lớp 3 – Bảng cửu chương & bài tập",
-    subject: "Toán", level: "Tiểu học", grade: "Lớp 3", type: "PDF",
-    tutor: { name: "Ngô Thị Hương", initials: "NTH", avatarBg: "#f97316" },
-    pages: 6, downloads: 510, likes: 120,
-    previewLines: ["Bảng nhân 2 đến 9", "Bài tập điền số", "Trò chơi ô chữ số"],
-    tag: "Phổ biến", tagColor: "bg-amber-50 text-amber-600 border-amber-200",
-    price: null,
-  },
-];
 
 // ─── Filter Constants ─────────────────────────────────────────────────────────
 const SUBJECTS = ["Tất cả", "Toán", "Vật lý", "Lập trình", "Tiếng Anh", "Hóa học", "Văn học"];
@@ -157,7 +37,7 @@ function fmt(price) {
 // ─── Preview Modal ────────────────────────────────────────────────────────────
 function PreviewModal({ material, onClose, onBuy }) {
   const isPaid = material.price !== null;
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = getCurrentUser();
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4" style={{ background: "rgba(0,0,0,0.5)" }} onClick={onClose}>
@@ -290,8 +170,10 @@ export default function MaterialsPage() {
   const [type, setType]               = useState("Tất cả");
   const [priceFilter, setPriceFilter] = useState("Tất cả");
   const [preview, setPreview]         = useState(null);
+  const [materials, setMaterials]     = useState([]);
+  useEffect(() => { getMaterials().then(setMaterials); }, []);
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = getCurrentUser();
 
   // Khi đổi level thì reset grade
   const handleLevelChange = (val) => {

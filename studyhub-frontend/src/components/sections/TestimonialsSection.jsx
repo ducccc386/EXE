@@ -1,4 +1,4 @@
-import { Squiggly, Triangle, Diamond } from "./shared";
+import { Squiggly, Triangle, Diamond } from "../shared";
 
 const testimonials = [
   {

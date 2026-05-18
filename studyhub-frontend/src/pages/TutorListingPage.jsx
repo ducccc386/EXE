@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import Navbar from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer";
 import { VerifiedBadge, StarRating, Avatar, SubjectBadge, formatPrice } from "../components/ui";
 import { tutors, SUBJECTS, PRICE_RANGES } from "../data/tutors";
 
@@ -106,7 +106,7 @@ function FilterSidebar({ subject, setSubject, priceRange, setPriceRange, verifie
               <button
                 key={s}
                 onClick={() => setSubject(s)}
-                className={`w-full text-left text-sm px-3 py-2 rounded-xl transition-all font-medium ${subject === s ? "bg-blue-600 text-white" : "text-gray-600 hover:bg-gray-100"
+                className={`w-full text-left text-sm px-3 py-2 rounded-xl transition-all font-medium ${subject === s ? "bg-blue-600 text-white" : "text-gray-600 hover:bg-blue-50 hover:text-blue-600"
                   }`}
               >
                 {s}
@@ -169,12 +169,26 @@ export default function TutorListingPage() {
       <Navbar />
 
       {/* Hero Search Bar */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 py-10 px-6">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-white text-3xl font-extrabold mb-2">Tìm gia sư phù hợp với bạn</h1>
-          <p className="text-blue-200 text-sm mb-6">Hơn 870 gia sư đã được xác minh đang sẵn sàng dạy bạn</p>
+      <div className="bg-gradient-to-br from-blue-700 via-blue-600 to-blue-500 py-12 px-6 relative overflow-hidden">
+        {/* Decorative circles */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-400 rounded-full opacity-20 -translate-y-1/2 translate-x-1/4" />
+        <div className="absolute bottom-0 left-20 w-40 h-40 bg-orange-400 rounded-full opacity-15 translate-y-1/2" />
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Tag */}
+          <span className="inline-block bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-4 uppercase tracking-wider">
+            870+ gia sư đã xác minh
+          </span>
+          <h1 className="text-white text-3xl md:text-4xl font-extrabold mb-2 drop-shadow-sm">
+            Tìm gia sư phù hợp với bạn
+          </h1>
+          <p className="text-blue-100 text-sm mb-7 font-medium">
+            Hơn 870 gia sư đã được xác minh đang sẵn sàng dạy bạn
+          </p>
+
+          {/* Search box */}
           <div className="relative max-w-2xl">
-            <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <input
@@ -182,8 +196,24 @@ export default function TutorListingPage() {
               placeholder="Tìm theo tên gia sư, môn học, kỹ năng..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 rounded-2xl text-gray-800 text-sm font-medium shadow-xl focus:outline-none focus:ring-2 focus:ring-orange-300"
+              className="w-full pl-12 pr-36 py-4 rounded-2xl text-gray-800 text-sm font-medium bg-white shadow-2xl focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder:text-gray-400"
             />
+            <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition-all active:scale-95 shadow-md shadow-orange-200">
+              Tìm kiếm
+            </button>
+          </div>
+
+          {/* Quick filters */}
+          <div className="flex flex-wrap gap-2 mt-5">
+            {["Toán học", "Tiếng Anh", "Lập trình", "Vật lý", "Hóa học"].map((s) => (
+              <button
+                key={s}
+                onClick={() => setSearchQuery(s)}
+                className="bg-white/20 hover:bg-white/30 text-white text-xs font-semibold px-4 py-1.5 rounded-full border border-white/30 transition-all backdrop-blur-sm"
+              >
+                {s}
+              </button>
+            ))}
           </div>
         </div>
       </div>

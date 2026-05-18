@@ -1,75 +1,9 @@
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import { useState, useEffect } from "react";
+import { getNews } from "../services/newsService";
+import Navbar from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer";
 import { PageHeader } from "../components/shared";
 
-const news = [
-  {
-    id: 1,
-    category: "Mẹo học tập",
-    categoryColor: "bg-orange-100 text-orange-600",
-    title: "5 Phương pháp học tập đã được chứng minh giúp cải thiện kết quả học tập",
-    excerpt: "Khám phá các phương pháp học tập hiệu quả nhất được học sinh giỏi trên toàn thế giới áp dụng. Từ kỹ thuật lặp lại ngắt quãng đến Pomodoro, những chiến lược này sẽ thay đổi cách bạn học.",
-    author: "Quản trị viên",
-    date: "10/03/2025",
-    readTime: "5 phút đọc",
-    featured: true,
-  },
-  {
-    id: 2,
-    category: "Tin tức nền tảng",
-    categoryColor: "bg-blue-100 text-blue-600",
-    title: "StudyHub Nay Cung Cấp Học 1 Kèm 1 Trong Hơn 50 Môn Học",
-    excerpt: "Chúng tôi vui mừng thông báo mở rộng mạng lưới gia sư. Học viên hiện có thể tìm gia sư chuyên gia trong nhiều môn học hơn bao giờ hết.",
-    author: "Quản trị viên",
-    date: "08/03/2025",
-    readTime: "3 phút đọc",
-    featured: false,
-  },
-  {
-    id: 3,
-    category: "Học viên thành công",
-    categoryColor: "bg-green-100 text-green-600",
-    title: "Câu chuyện của Ngọc Anh: Từ điểm Yếu lên Giỏi Toán chỉ trong 3 tháng",
-    excerpt: "Đọc câu chuyện cải thiện học tập đáng kinh ngạc của Ngọc Anh với sự hỗ trợ của gia sư tận tâm từ StudyHub.",
-    author: "Quản trị viên",
-    date: "05/03/2025",
-    readTime: "6 phút đọc",
-    featured: false,
-  },
-  {
-    id: 4,
-    category: "Mẹo học tập",
-    categoryColor: "bg-orange-100 text-orange-600",
-    title: "Cách chọn gia sư phù hợp với phong cách học tập của bạn",
-    excerpt: "Không phải gia sư nào cũng dạy giống nhau, và không phải học viên nào cũng học theo cách giống nhau. Đây là hướng dẫn toàn diện để tìm gia sư hoàn hảo cho bạn.",
-    author: "Quản trị viên",
-    date: "03/03/2025",
-    readTime: "4 phút đọc",
-    featured: false,
-  },
-  {
-    id: 5,
-    category: "Tin tức nền tảng",
-    categoryColor: "bg-blue-100 text-blue-600",
-    title: "Ra mắt tính năng Bảng trắng tương tác 2.0 mới",
-    excerpt: "Bảng trắng nâng cấp hỗ trợ vẽ nhiều người dùng, phương trình LaTeX, tô sáng code và công cụ cộng tác thời gian thực.",
-    author: "Quản trị viên",
-    date: "28/02/2025",
-    readTime: "3 phút đọc",
-    featured: false,
-  },
-  {
-    id: 6,
-    category: "Giáo dục",
-    categoryColor: "bg-purple-100 text-purple-600",
-    title: "Tương lai của Giáo dục Trực tuyến: Xu hướng cần theo dõi năm 2025",
-    excerpt: "Gia sư hỗ trợ AI, lớp học VR và lộ trình học cá nhân hóa đang định hình lại nền giáo dục.",
-    author: "Quản trị viên",
-    date: "25/02/2025",
-    readTime: "7 phút đọc",
-    featured: false,
-  },
-];
 
 const iconPaths = {
   "Mẹo học tập": "M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z",
@@ -147,6 +81,8 @@ function NewsCard({ post }) {
 }
 
 export default function NewsPage() {
+  const [news, setNews] = useState([]);
+  useEffect(() => { getNews().then(setNews); }, []);
   const featured = news.find((n) => n.featured);
   const rest = news.filter((n) => !n.featured);
 
