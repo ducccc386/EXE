@@ -16,6 +16,24 @@ const TEACHING_STYLES = [
   "#Friendly", "#Funny", "#Easygoing", "#Patient", "#Encouraging", "#Serious", "#Strict", "#Structured", "#Interactive", "#Creative", "#Practical", "#Detail-oriented"
 ];
 
+const CATEGORY_ALIASES = {
+  English: ["tiếng anh", "english", "ielts"],
+  IELTS: ["ielts", "tiếng anh"],
+  Math: ["toán học", "math"],
+  Chemistry: ["hóa học", "chemistry"],
+  Literature: ["văn học", "literature"],
+  SAT: ["sat"],
+};
+
+const matchesCategory = (tutor, category) => {
+  if (category === "Tất cả") return true;
+  const aliases = CATEGORY_ALIASES[category] || [category.toLowerCase()];
+  const subject = (tutor.subject || "").toLowerCase();
+  const title = (tutor.title || "").toLowerCase();
+  const tags = (tutor.tags || []).map((tag) => tag.toLowerCase());
+  return aliases.some((alias) => subject.includes(alias) || title.includes(alias) || tags.some((tag) => tag.includes(alias)));
+};
+
 export default function HomePage() {
   const [keyword, setKeyword] = useState("");
   const [subject, setSubject] = useState("");
@@ -23,13 +41,21 @@ export default function HomePage() {
   const [style, setStyle] = useState("");
   const [price, setPrice] = useState([50000, 1000000]);
   const [gender, setGender] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("Tất cả");
   const navigate = useNavigate();
 
 
   // Ref for featured tutors section
   const featuredTutorsRef = useRef(null);
   // Lọc gia sư nổi bật (giả lập, lấy 3 người đầu)
-  const featuredTutors = tutors.slice(0, 3);
+  const featuredTutors = tutors
+    .filter((tutor) => matchesCategory(tutor, selectedCategory))
+    .slice(0, 3);
+
+  const categoryCounts = SUBJECTS.reduce((acc, category) => {
+    acc[category] = tutors.filter((tutor) => matchesCategory(tutor, category)).length;
+    return acc;
+  }, {});
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -38,7 +64,7 @@ export default function HomePage() {
       <StepsNav />
 
       {/* Banner + Search */}
-      <div data-scrollspy data-scroll-title="Tìm gia sư" className="relative bg-gradient-to-br from-blue-600 to-blue-400 py-16 px-4 text-center">
+      <div data-scrollspy data-scroll-title="Tìm gia sư" className="relative bg-linear-to-br from-blue-600 to-blue-400 py-16 px-4 text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 drop-shadow-lg">Find Your Perfect Tutor</h1>
         <div className="flex flex-col md:flex-row justify-center gap-4 mb-8">
           <button
@@ -63,7 +89,7 @@ export default function HomePage() {
                 {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
               <input type="text" placeholder="Location (e.g., Ha Noi)" value={location} onChange={e => setLocation(e.target.value)} className="w-56 px-5 py-3 rounded-full border border-white/20 shadow-inner placeholder-gray-400 focus:ring-2 focus:ring-[#0b63ff] outline-none" />
-              <button className="bg-gradient-to-r from-[#ff7a00] to-[#ff9a3c] text-white font-bold px-6 py-3 rounded-full shadow-lg hover:brightness-95 transition">Search</button>
+              <button className="bg-linear-to-r from-[#ff7a00] to-[#ff9a3c] text-white font-bold px-6 py-3 rounded-full shadow-lg hover:brightness-95 transition">Search</button>
             </div>
 
             <div className="flex flex-wrap gap-3 items-center mt-2">
@@ -102,23 +128,66 @@ export default function HomePage() {
       </div>
 
       {/* Popular Categories */}
-      <div data-scrollspy data-scroll-title="Danh mục" className="max-w-5xl mx-auto mt-12">
-        <h2 className="text-3xl font-extrabold text-green-600 text-center mb-8">Popular Categories</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 mb-12">
-          {SUBJECTS.map(s => (
-            <div key={s} className="bg-green-50 rounded-xl p-6 flex flex-col items-center shadow hover:shadow-lg transition-all">
-              <span className="text-3xl mb-2">📚</span>
-              <span className="font-bold text-lg text-green-700 mb-1">{s}</span>
-              <span className="text-gray-500 text-sm">{Math.floor(Math.random() * 60 + 5)} tutors</span>
-            </div>
-          ))}
+      <div data-scrollspy data-scroll-title="Danh mục" className="max-w-6xl mx-auto mt-12 px-4">
+        <div className="flex items-end justify-between gap-4 mb-8">
+          <div>
+            <h2 className="text-3xl font-extrabold text-gray-900 text-left">Popular Categories</h2>
+            <p className="text-sm text-gray-500 mt-1">Bấm vào một danh mục để xem các gia sư phù hợp</p>
+          </div>
+          <button
+            onClick={() => setSelectedCategory("Tất cả")}
+            className="text-sm font-semibold text-[#0b63ff] hover:text-[#ff7a00] transition-colors"
+          >
+            Xem tất cả
+          </button>
         </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
+          {SUBJECTS.map((s) => {
+            const active = selectedCategory === s;
+            return (
+              <button
+                key={s}
+                onClick={() => {
+                  setSelectedCategory(s);
+                  featuredTutorsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+                className={`group text-left rounded-3xl p-5 border transition-all shadow-sm hover:shadow-xl ${active ? "border-transparent bg-linear-to-br from-[#0b63ff] to-[#ff7a00] text-white" : "bg-white border-gray-100 hover:border-blue-200 hover:-translate-y-1"}`}
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 ${active ? "bg-white/15" : "bg-blue-50"}`}>
+                      <span className={active ? "text-white" : "text-[#0b63ff]"}>📚</span>
+                    </div>
+                    <h3 className={`text-lg font-bold mb-1 ${active ? "text-white" : "text-gray-900"}`}>{s}</h3>
+                    <p className={`text-sm ${active ? "text-white/80" : "text-gray-500"}`}>{categoryCounts[s] || 0} tutors</p>
+                  </div>
+                  <span className={`text-xs font-semibold px-3 py-1 rounded-full ${active ? "bg-white/15 text-white" : "bg-gray-100 text-gray-500"}`}>
+                    {active ? "Đang xem" : "Chọn"}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {selectedCategory !== "Tất cả" && (
+          <div className="mb-6 flex items-center justify-between gap-3 bg-blue-50 border border-blue-100 rounded-2xl px-4 py-3">
+            <div>
+              <p className="text-sm font-semibold text-[#0b63ff]">Đang lọc theo: {selectedCategory}</p>
+              <p className="text-xs text-gray-500">{featuredTutors.length} gia sư đang hiển thị</p>
+            </div>
+            <button onClick={() => setSelectedCategory("Tất cả")} className="text-sm font-semibold text-[#ff7a00] hover:underline">Bỏ lọc</button>
+          </div>
+        )}
       </div>
 
       {/* Featured Tutors */}
-      <div ref={featuredTutorsRef} data-scrollspy data-scroll-title="Gia sư nổi bật" className="max-w-5xl mx-auto mt-4 mb-16">
-        <h2 className="text-3xl font-extrabold text-gray-800 text-center mb-2">Gia Sư Nổi Bật</h2>
-        <p className="text-center text-gray-500 mb-8">Discover experienced tutors who are ready to help you achieve your academic goals</p>
+      <div ref={featuredTutorsRef} data-scrollspy data-scroll-title="Gia sư nổi bật" className="max-w-6xl mx-auto mt-4 mb-16 px-4">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-extrabold text-gray-800 mb-2">Gia Sư Nổi Bật</h2>
+          <p className="text-gray-500">{selectedCategory === "Tất cả" ? "Discover experienced tutors who are ready to help you achieve your academic goals" : `Gia sư phù hợp cho danh mục ${selectedCategory}`}</p>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {featuredTutors.map(tutor => (
             <div key={tutor.id} className="bg-white rounded-2xl shadow p-6 flex flex-col items-center">
