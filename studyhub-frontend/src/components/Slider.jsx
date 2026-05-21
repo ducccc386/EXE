@@ -64,24 +64,27 @@ export default function Slider({ className = "" }) {
             >
               <div className="w-full h-full">
                 <div className="absolute inset-0 bg-center bg-cover" style={{ backgroundImage: `url(${s.image})` }} />
-                <div className="absolute inset-0 bg-black/45" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
                 <div className="relative z-10 max-w-7xl mx-auto h-full flex items-center p-6 md:p-10">
                   <div className="flex-1 text-white">
-                    <h2 className="text-xl md:text-2xl lg:text-3xl font-extrabold">{s.title}</h2>
-                    <p className="mt-2 text-sm md:text-base opacity-90">{s.subtitle}</p>
-                    <button className="mt-4 inline-block bg-white text-gray-800 font-semibold px-4 py-2 rounded-full shadow">{s.cta}</button>
+                    <h2 className="text-2xl md:text-4xl lg:text-5xl font-extrabold drop-shadow-md">{s.title}</h2>
+                    <p className="mt-3 text-base md:text-lg opacity-95 max-w-2xl drop-shadow-sm">{s.subtitle}</p>
+                    <div className="mt-6 flex items-center gap-4">
+                      <button className="inline-flex items-center gap-2 bg-gradient-to-r from-[#0b63ff] to-[#3b82f6] text-white font-semibold px-5 py-3 rounded-full shadow-lg hover:scale-[1.02] transition-transform">{s.cta}</button>
+                      <button className="inline-flex items-center gap-2 bg-white/20 text-white font-medium px-4 py-2 rounded-full border border-white/30 hover:bg-white/30 transition-colors">Learn more</button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           ))}
 
-          <div className="absolute left-4 bottom-4 flex items-center gap-2">
+          <div className="absolute left-6 bottom-6 flex items-center gap-3">
             {slides.map((s, i) => (
               <button
                 key={s.id}
                 onClick={() => setIndex(i)}
-                className={`w-3 h-3 rounded-full ${i === index ? "bg-white" : "bg-white/40"}`}
+                className={`w-3 h-3 rounded-full border-2 ${i === index ? "border-white bg-white" : "border-white/40 bg-white/30"}`}
                 aria-label={`Go to slide ${i + 1}`}
               />
             ))}
