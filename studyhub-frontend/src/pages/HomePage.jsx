@@ -5,6 +5,7 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { tutors } from "../data/tutors";
 import Slider from "../components/Slider";
+import StepsNav from "../components/StepsNav";
 
 
 const SUBJECTS = [
@@ -34,6 +35,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <Slider />
+      <StepsNav />
 
       {/* Banner + Search */}
       <div data-scrollspy data-scroll-title="Tìm gia sư" className="relative bg-gradient-to-br from-blue-600 to-blue-400 py-16 px-4 text-center">
