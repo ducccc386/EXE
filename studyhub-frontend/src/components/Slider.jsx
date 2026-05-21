@@ -45,18 +45,34 @@ const slides = [
 
 export default function Slider({ className = "" }) {
   const [index, setIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
+    if (isPaused) return undefined;
     const t = setInterval(() => setIndex((i) => (i + 1) % slides.length), 5000);
     return () => clearInterval(t);
+  }, [isPaused]);
+
+  // keyboard navigation (left/right)
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "ArrowLeft") setIndex((i) => (i - 1 + slides.length) % slides.length);
+      if (e.key === "ArrowRight") setIndex((i) => (i + 1) % slides.length);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
 
   // Slider only — scrollspy handled by StepsNav component on HomePage
 
   return (
-    <div className={`w-full overflow-hidden relative ${className}`}>
+    <div
+      className={`w-full overflow-hidden relative ${className}`}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       <div className="w-full">
-        <div className="relative h-64 md:h-72 lg:h-96 overflow-hidden">
+        <div className="relative h-64 md:h-72 lg:h-96 overflow-hidden" role="region" aria-label="Homepage banner">
           {slides.map((s, i) => (
             <div
               key={s.id}
@@ -105,8 +121,9 @@ export default function Slider({ className = "" }) {
               <button
                 key={s.id}
                 onClick={() => setIndex(i)}
-                className={`w-3 h-3 rounded-full border-2 ${i === index ? "border-white bg-white" : "border-white/40 bg-white/30"}`}
-                aria-label={`Go to slide ${i + 1}`}
+                aria-current={i === index}
+                title={`Go to slide ${i + 1}`}
+                className={`transition-transform duration-200 rounded-full ${i === index ? 'w-4 h-4 bg-white border-2 border-white shadow-md scale-110' : 'w-3 h-3 bg-white/30 border border-white/30 hover:bg-white/60'}`}
               />
             ))}
           </div>
