@@ -7,7 +7,7 @@ const slides = [
     subtitle: "Kết nối tri thức, xây dựng niềm tin",
     cta: "Tìm hiểu",
     image: "/assets/slider/banner.jpg",
-    bg: "bg-white",
+    gradient: "linear-gradient(90deg,#0b63ff 0%,#ff7a00 100%)",
   },
   {
     id: 2,
@@ -15,7 +15,7 @@ const slides = [
     subtitle: "Frontend Hiện Đại Với React.js",
     cta: "ĐĂNG KÝ NGAY",
     image: "/assets/slider/react-course.jpg",
-    bg: "bg-gradient-to-r from-blue-600 to-purple-500",
+    gradient: "linear-gradient(90deg,#0b63ff 0%,#ff7a00 100%)",
   },
   {
     id: 3,
@@ -39,7 +39,7 @@ const slides = [
     subtitle: "Tài liệu chất lượng, cập nhật liên tục",
     cta: "Xem tài liệu",
     image: "/assets/slider/react-course.jpg",
-    bg: "bg-gradient-to-r from-indigo-500 to-blue-500",
+    gradient: "linear-gradient(90deg,#0b63ff 0%,#ff7a00 100%)",
   },
 ];
 
@@ -63,15 +63,15 @@ export default function Slider({ className = "" }) {
               className={`absolute inset-0 transition-all duration-700 ease-in-out transform ${i === index ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-6 pointer-events-none"}`}
             >
               <div className="w-full h-full">
-                <div className="absolute inset-0 bg-center bg-cover" style={{ backgroundImage: `url(${s.image})` }} />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+                <div className="absolute inset-0" style={{ background: s.gradient }} />
+                <div className="absolute inset-0 bg-white/5" />
                 <div className="relative z-10 max-w-7xl mx-auto h-full flex items-center p-6 md:p-10">
                   <div className="flex-1 text-white">
                     <h2 className="text-2xl md:text-4xl lg:text-5xl font-extrabold drop-shadow-md">{s.title}</h2>
                     <p className="mt-3 text-base md:text-lg opacity-95 max-w-2xl drop-shadow-sm">{s.subtitle}</p>
                     <div className="mt-6 flex items-center gap-4">
-                      <button className="inline-flex items-center gap-2 bg-gradient-to-r from-[#0b63ff] to-[#3b82f6] text-white font-semibold px-5 py-3 rounded-full shadow-lg hover:scale-[1.02] transition-transform">{s.cta}</button>
-                      <button className="inline-flex items-center gap-2 bg-white/20 text-white font-medium px-4 py-2 rounded-full border border-white/30 hover:bg-white/30 transition-colors">Learn more</button>
+                      <button className="inline-flex items-center gap-2 bg-gradient-to-r from-[#ff7a00] to-[#ff9a3c] text-white font-semibold px-5 py-3 rounded-full shadow-lg hover:scale-[1.02] transition-transform">{s.cta}</button>
+                      <button className="inline-flex items-center gap-2 bg-white text-[#0b63ff] font-medium px-4 py-2 rounded-full border border-white/30 hover:bg-white/95 transition-colors">Tìm hiểu thêm</button>
                     </div>
                   </div>
                 </div>
