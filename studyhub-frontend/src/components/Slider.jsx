@@ -23,7 +23,7 @@ const slides = [
     subtitle: "Hàng trăm gia sư chất lượng",
     cta: "Tìm ngay",
     image: "/assets/slider/tutors.jpg",
-    bg: "bg-gradient-to-r from-green-400 to-blue-500",
+    gradient: "linear-gradient(90deg,#0b63ff 0%,#ff7a00 100%)",
   },
   {
     id: 4,
@@ -31,7 +31,7 @@ const slides = [
     subtitle: "Lộ trình cá nhân hóa",
     cta: "Xem khóa học",
     image: "/assets/slider/ielts.jpg",
-    bg: "bg-gradient-to-r from-orange-400 to-pink-400",
+    gradient: "linear-gradient(90deg,#0b63ff 0%,#ff7a00 100%)",
   },
   {
     id: 5,
@@ -78,6 +78,27 @@ export default function Slider({ className = "" }) {
               </div>
             </div>
           ))}
+
+          {/* left / right arrows */}
+          <button
+            aria-label="Previous slide"
+            onClick={() => setIndex((index - 1 + slides.length) % slides.length)}
+            className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white/20 text-white absolute left-4 top-1/2 -translate-y-1/2 shadow-lg hover:bg-white/30 transition-colors"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="stroke-current">
+              <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+
+          <button
+            aria-label="Next slide"
+            onClick={() => setIndex((index + 1) % slides.length)}
+            className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white/20 text-white absolute right-4 top-1/2 -translate-y-1/2 shadow-lg hover:bg-white/30 transition-colors"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="stroke-current">
+              <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
 
           <div className="absolute left-6 bottom-6 flex items-center gap-3">
             {slides.map((s, i) => (
