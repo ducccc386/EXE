@@ -53,42 +53,50 @@ export default function HomePage() {
           </button>
           <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-4 rounded-xl shadow transition-all text-lg border-2 border-white/30" onClick={() => navigate("/register")}>Become a Tutor</button>
         </div>
-        {/* Search Filters */}
-        <div className="bg-white rounded-2xl shadow-lg max-w-4xl mx-auto p-6 flex flex-col md:flex-row gap-4 items-center justify-center">
-          <input type="text" placeholder="Enter keywords" value={keyword} onChange={e => setKeyword(e.target.value)} className="border rounded-lg px-4 py-2 w-full md:w-48" />
-          <select value={subject} onChange={e => setSubject(e.target.value)} className="border rounded-lg px-4 py-2 w-full md:w-40">
-            <option value="">All Subjects</option>
-            {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
-          </select>
-          <input type="text" placeholder="Type to search location (e.g., Ha Noi, Ba Dinh)" value={location} onChange={e => setLocation(e.target.value)} className="border rounded-lg px-4 py-2 w-full md:w-56" />
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold px-6 py-2 rounded-lg transition-all">Search</button>
-        </div>
-        {/* Teaching Styles */}
-        <div className="flex flex-wrap gap-2 justify-center mt-4">
-          {TEACHING_STYLES.map(tag => (
-            <span key={tag} className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs cursor-pointer hover:bg-blue-100">{tag}</span>
-          ))}
-        </div>
-        {/* Price & Gender */}
-        <div className="flex flex-wrap gap-4 justify-center items-center mt-4">
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-700">Price Range (VND/hr):</span>
-            <span className="font-bold text-blue-700">50,000</span>
-            <input type="range" min={50000} max={1000000} step={50000} value={price[0]} onChange={e => setPrice([+e.target.value, price[1]])} className="mx-2" />
-            <input type="range" min={50000} max={1000000} step={50000} value={price[1]} onChange={e => setPrice([price[0], +e.target.value])} className="mx-2" />
-            <span className="font-bold text-blue-700">1,000,000 VND</span>
-          </div>
-          <div>
-            <select value={style} onChange={e => setStyle(e.target.value)} className="border rounded-lg px-2 py-1">
-              <option value="">Default</option>
-              {TEACHING_STYLES.map(tag => <option key={tag} value={tag}>{tag}</option>)}
-            </select>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-700">Gender:</span>
-            <button className={`px-3 py-1 rounded-full font-bold ${gender === "All" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700"}`} onClick={() => setGender("All")}>All</button>
-            <button className={`px-3 py-1 rounded-full font-bold ${gender === "Male" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700"}`} onClick={() => setGender("Male")}>Male</button>
-            <button className={`px-3 py-1 rounded-full font-bold ${gender === "Female" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700"}`} onClick={() => setGender("Female")}>Female</button>
+        {/* Search Filters - modernized */}
+        <div className="max-w-5xl mx-auto">
+          <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-6 md:p-8 flex flex-col gap-4">
+            <div className="flex flex-col md:flex-row gap-3 items-center">
+              <input type="text" placeholder="Enter keywords (e.g., tutor name, subject)" value={keyword} onChange={e => setKeyword(e.target.value)} className="flex-1 px-5 py-3 rounded-full border border-white/20 shadow-inner placeholder-gray-400 focus:ring-2 focus:ring-[#0b63ff] outline-none" />
+              <select value={subject} onChange={e => setSubject(e.target.value)} className="w-48 px-4 py-3 rounded-full border border-white/20 bg-white/95 focus:ring-2 focus:ring-[#0b63ff] outline-none">
+                <option value="">All Subjects</option>
+                {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
+              </select>
+              <input type="text" placeholder="Location (e.g., Ha Noi)" value={location} onChange={e => setLocation(e.target.value)} className="w-56 px-5 py-3 rounded-full border border-white/20 shadow-inner placeholder-gray-400 focus:ring-2 focus:ring-[#0b63ff] outline-none" />
+              <button className="bg-gradient-to-r from-[#ff7a00] to-[#ff9a3c] text-white font-bold px-6 py-3 rounded-full shadow-lg hover:brightness-95 transition">Search</button>
+            </div>
+
+            <div className="flex flex-wrap gap-3 items-center mt-2">
+              {TEACHING_STYLES.map(tag => (
+                <button key={tag} className="bg-white/80 text-[#0b63ff] px-3 py-1 rounded-full text-sm shadow-sm hover:scale-105 transition" onClick={() => setStyle(tag)}>{tag}</button>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-6 mt-3 justify-between">
+              <div className="flex items-center gap-4">
+                <div className="text-sm text-gray-700">Price:</div>
+                <div className="text-sm font-bold text-[#0b63ff]">{price[0].toLocaleString()} - {price[1].toLocaleString()} VND</div>
+                <div className="w-48">
+                  <input type="range" min={50000} max={1000000} step={50000} value={price[0]} onChange={e => setPrice([+e.target.value, price[1]])} className="w-full" />
+                </div>
+                <div className="w-48">
+                  <input type="range" min={50000} max={1000000} step={50000} value={price[1]} onChange={e => setPrice([price[0], +e.target.value])} className="w-full" />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <select value={style} onChange={e => setStyle(e.target.value)} className="px-3 py-2 rounded-full border border-white/20 bg-white/95">
+                  <option value="">All styles</option>
+                  {TEACHING_STYLES.map(tag => <option key={tag} value={tag}>{tag}</option>)}
+                </select>
+
+                <div className="flex items-center gap-2">
+                  <button className={`px-4 py-2 rounded-full font-semibold ${gender === "All" ? "bg-[#0b63ff] text-white" : "bg-white/90 text-gray-700"}`} onClick={() => setGender("All")}>All</button>
+                  <button className={`px-4 py-2 rounded-full font-semibold ${gender === "Male" ? "bg-[#0b63ff] text-white" : "bg-white/90 text-gray-700"}`} onClick={() => setGender("Male")}>Male</button>
+                  <button className={`px-4 py-2 rounded-full font-semibold ${gender === "Female" ? "bg-[#0b63ff] text-white" : "bg-white/90 text-gray-700"}`} onClick={() => setGender("Female")}>Female</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
