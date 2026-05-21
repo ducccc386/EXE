@@ -8,7 +8,7 @@ import Slider from "../components/Slider";
 
 function TutorCard({ tutor, onView }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 cursor-pointer overflow-hidden group flex flex-col">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 cursor-pointer overflow-hidden group flex flex-col">
       <div className="flex items-start gap-4 p-5 pb-3">
         <Avatar initials={tutor.initials} bg={tutor.avatarBg} size="md" />
         <div className="flex-1 min-w-0">
@@ -47,8 +47,8 @@ function TutorProfileDrawer({ tutor, open, onClose }) {
   return (
     <div className="fixed inset-0 z-50">
       <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" onClick={onClose} />
-      <aside className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl border-l border-gray-100 overflow-y-auto animate-in slide-in-from-right-6 duration-300">
-        <div className="p-6 border-b border-gray-100 flex items-start justify-between">
+      <aside className="absolute right-0 top-0 h-full w-full max-w-md bg-white dark:bg-slate-900 shadow-2xl border-l border-gray-100 dark:border-slate-800 overflow-y-auto animate-in slide-in-from-right-6 duration-300">
+          <div className="p-6 border-b border-gray-100 flex items-start justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-600">Tutor Profile</p>
             <h3 className="text-xl font-extrabold text-gray-900 mt-1">Thông tin gia sư</h3>
@@ -98,10 +98,10 @@ function TutorProfileDrawer({ tutor, open, onClose }) {
 
           <div className="space-y-3">
             <button className="w-full rounded-2xl bg-blue-600 text-white font-bold py-3 hover:bg-blue-700 transition-colors">
-              Đặt lịch
-            </button>
-            <button className="w-full rounded-2xl border border-gray-200 text-gray-700 font-bold py-3 hover:bg-gray-50 transition-colors">
               Nhắn tin
+            </button>
+            <button className="w-full rounded-2xl border border-orange-200 text-orange-600 font-bold py-3 hover:bg-orange-50 transition-colors">
+              Gửi kết bạn
             </button>
           </div>
         </div>
@@ -149,7 +149,7 @@ export default function TutorListingPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 dark:text-slate-100 font-sans">
       <Navbar />
       <div className="pt-6">
         <Slider />
@@ -158,12 +158,12 @@ export default function TutorListingPage() {
         <h1 className="text-3xl md:text-4xl font-extrabold mb-6 text-center">Tìm gia sư phù hợp</h1>
 
         <div className="flex flex-col md:flex-row gap-4 mb-8 justify-center items-center">
-          <input type="text" placeholder="Tìm theo tên gia sư, môn học, kỹ năng..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="border rounded-lg px-4 py-3 w-full md:w-2/5" />
-          <select value={subject} onChange={e => setSubject(e.target.value)} className="border rounded-lg px-4 py-3 w-full md:w-1/5">
+          <input type="text" placeholder="Tìm theo tên gia sư, môn học, kỹ năng..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="border rounded-lg px-4 py-3 w-full md:w-2/5 bg-white dark:bg-slate-900 dark:border-slate-800" />
+          <select value={subject} onChange={e => setSubject(e.target.value)} className="border rounded-lg px-4 py-3 w-full md:w-1/5 bg-white dark:bg-slate-900 dark:border-slate-800">
             <option value="Tất cả">Tất cả</option>
             {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
-          <select value={priceRange} onChange={e => setPriceRange(Number(e.target.value))} className="border rounded-lg px-4 py-3 w-full md:w-1/5">
+          <select value={priceRange} onChange={e => setPriceRange(Number(e.target.value))} className="border rounded-lg px-4 py-3 w-full md:w-1/5 bg-white dark:bg-slate-900 dark:border-slate-800">
             {PRICE_RANGES.map((r, i) => <option key={i} value={i}>{r.label}</option>)}
           </select>
         </div>
@@ -173,11 +173,11 @@ export default function TutorListingPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.length === 0 ? (
-              <div className="col-span-full text-center text-gray-500 font-semibold">Không tìm thấy gia sư.</div>
+              <div className="col-span-full text-center text-gray-500 dark:text-gray-400 font-semibold">Không tìm thấy gia sư.</div>
             ) : (
                 filtered.map(t => (
-                <TutorCard key={t.id} tutor={t} onView={() => setSelectedTutor(t)} />
-              ))
+                  <TutorCard key={t.id} tutor={t} onView={() => setSelectedTutor(t)} />
+                ))
             )}
           </div>
         )}

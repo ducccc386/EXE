@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { tutors } from "../data/tutors";
 import Slider from "../components/Slider";
 import StepsNav from "../components/StepsNav";
+import { useLanguage } from "../hooks/usePreferences";
 
 
 const SUBJECTS = [
@@ -123,6 +124,7 @@ function TutorProfileDrawer({ tutor, open, onClose }) {
 }
 
 export default function HomePage() {
+  const { lang } = useLanguage();
   const [keyword, setKeyword] = useState("");
   const [subject, setSubject] = useState("");
   const [location, setLocation] = useState("");
@@ -160,15 +162,49 @@ export default function HomePage() {
     featuredTutorsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  const copy = lang === "vi"
+    ? {
+        heroTitle: "Tìm gia sư phù hợp",
+        heroFind: "Tìm gia sư",
+        heroBecome: "Trở thành gia sư",
+        searchKeyword: "Từ khóa (tên gia sư, môn học, kỹ năng)",
+        searchLocation: "Địa điểm (ví dụ: Hà Nội)",
+        searchBtn: "Tìm kiếm",
+        categoriesTitle: "Popular Categories",
+        categoriesSub: "Bấm vào một danh mục để cuộn thẳng xuống phần gia sư",
+        tutorsTitle: "Gia sư nổi bật",
+        tutorsSub: "Các gia sư phù hợp sẽ hiển thị ở đây",
+        allStyles: "Tất cả phong cách",
+        all: "Tất cả",
+        male: "Nam",
+        female: "Nữ",
+      }
+    : {
+        heroTitle: "Find Your Perfect Tutor",
+        heroFind: "Find a Tutor",
+        heroBecome: "Become a Tutor",
+        searchKeyword: "Keywords (tutor name, subject, skill)",
+        searchLocation: "Location (e.g., Hanoi)",
+        searchBtn: "Search",
+        categoriesTitle: "Popular Categories",
+        categoriesSub: "Click a category to jump straight to the tutor section",
+        tutorsTitle: "Featured Tutors",
+        tutorsSub: "Matching tutors will appear here",
+        allStyles: "All styles",
+        all: "All",
+        male: "Male",
+        female: "Female",
+      };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 dark:text-slate-100">
       <Navbar />
       <Slider />
       <StepsNav />
 
       {/* Banner + Search */}
-      <div data-scrollspy data-scroll-title="Tìm gia sư" className="relative bg-linear-to-br from-blue-600 to-blue-400 py-16 px-4 text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 drop-shadow-lg">Find Your Perfect Tutor</h1>
+      <div data-scrollspy data-scroll-title={copy.heroTitle} className="relative bg-linear-to-br from-blue-600 to-blue-400 py-16 px-4 text-center">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 drop-shadow-lg">{copy.heroTitle}</h1>
         <div className="flex flex-col md:flex-row justify-center gap-4 mb-8">
           <button
             className="bg-white/80 hover:bg-white text-blue-600 font-bold px-8 py-4 rounded-xl shadow transition-all text-lg"
@@ -178,21 +214,21 @@ export default function HomePage() {
               }
             }}
           >
-            Find a Tutor
+            {copy.heroFind}
           </button>
-          <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-4 rounded-xl shadow transition-all text-lg border-2 border-white/30" onClick={() => navigate("/register")}>Become a Tutor</button>
+          <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-4 rounded-xl shadow transition-all text-lg border-2 border-white/30" onClick={() => navigate("/register")}>{copy.heroBecome}</button>
         </div>
         {/* Search Filters - modernized */}
         <div className="max-w-5xl mx-auto">
-          <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-6 md:p-8 flex flex-col gap-4">
+          <div className="bg-white/95 dark:bg-slate-900/90 backdrop-blur-sm rounded-3xl shadow-2xl p-6 md:p-8 flex flex-col gap-4 border border-white/60 dark:border-slate-800">
             <div className="flex flex-col md:flex-row gap-3 items-center">
-              <input type="text" placeholder="Enter keywords (e.g., tutor name, subject)" value={keyword} onChange={e => setKeyword(e.target.value)} className="flex-1 px-5 py-3 rounded-full border border-white/20 shadow-inner placeholder-gray-400 focus:ring-2 focus:ring-[#0b63ff] outline-none" />
+              <input type="text" placeholder={copy.searchKeyword} value={keyword} onChange={e => setKeyword(e.target.value)} className="flex-1 px-5 py-3 rounded-full border border-white/20 shadow-inner placeholder-gray-400 focus:ring-2 focus:ring-[#0b63ff] outline-none" />
               <select value={subject} onChange={e => setSubject(e.target.value)} className="w-48 px-4 py-3 rounded-full border border-white/20 bg-white/95 focus:ring-2 focus:ring-[#0b63ff] outline-none">
                 <option value="">All Subjects</option>
                 {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
-              <input type="text" placeholder="Location (e.g., Ha Noi)" value={location} onChange={e => setLocation(e.target.value)} className="w-56 px-5 py-3 rounded-full border border-white/20 shadow-inner placeholder-gray-400 focus:ring-2 focus:ring-[#0b63ff] outline-none" />
-              <button onClick={handleSearch} className="bg-linear-to-r from-[#ff7a00] to-[#ff9a3c] text-white font-bold px-6 py-3 rounded-full shadow-lg hover:brightness-95 transition">Search</button>
+              <input type="text" placeholder={copy.searchLocation} value={location} onChange={e => setLocation(e.target.value)} className="w-56 px-5 py-3 rounded-full border border-white/20 shadow-inner placeholder-gray-400 focus:ring-2 focus:ring-[#0b63ff] outline-none" />
+              <button onClick={handleSearch} className="bg-linear-to-r from-[#ff7a00] to-[#ff9a3c] text-white font-bold px-6 py-3 rounded-full shadow-lg hover:brightness-95 transition">{copy.searchBtn}</button>
             </div>
 
             <div className="flex flex-wrap gap-3 items-center mt-2">
@@ -215,14 +251,14 @@ export default function HomePage() {
 
               <div className="flex items-center gap-3">
                 <select value={style} onChange={e => setStyle(e.target.value)} className="px-3 py-2 rounded-full border border-white/20 bg-white/95">
-                  <option value="">All styles</option>
+                  <option value="">{copy.allStyles}</option>
                   {TEACHING_STYLES.map(tag => <option key={tag} value={tag}>{tag}</option>)}
                 </select>
 
                 <div className="flex items-center gap-2">
-                  <button className={`px-4 py-2 rounded-full font-semibold ${gender === "All" ? "bg-[#0b63ff] text-white" : "bg-white/90 text-gray-700"}`} onClick={() => setGender("All")}>All</button>
-                  <button className={`px-4 py-2 rounded-full font-semibold ${gender === "Male" ? "bg-[#0b63ff] text-white" : "bg-white/90 text-gray-700"}`} onClick={() => setGender("Male")}>Male</button>
-                  <button className={`px-4 py-2 rounded-full font-semibold ${gender === "Female" ? "bg-[#0b63ff] text-white" : "bg-white/90 text-gray-700"}`} onClick={() => setGender("Female")}>Female</button>
+                  <button className={`px-4 py-2 rounded-full font-semibold ${gender === "All" ? "bg-[#0b63ff] text-white" : "bg-white/90 text-gray-700"}`} onClick={() => setGender("All")}>{copy.all}</button>
+                  <button className={`px-4 py-2 rounded-full font-semibold ${gender === "Male" ? "bg-[#0b63ff] text-white" : "bg-white/90 text-gray-700"}`} onClick={() => setGender("Male")}>{copy.male}</button>
+                  <button className={`px-4 py-2 rounded-full font-semibold ${gender === "Female" ? "bg-[#0b63ff] text-white" : "bg-white/90 text-gray-700"}`} onClick={() => setGender("Female")}>{copy.female}</button>
                 </div>
               </div>
             </div>
@@ -234,15 +270,9 @@ export default function HomePage() {
       <div data-scrollspy data-scroll-title="Danh mục" className="max-w-6xl mx-auto mt-12 px-4">
         <div className="flex flex-col items-center text-center gap-2 mb-8">
           <div>
-            <h2 className="text-3xl font-extrabold text-gray-900">Popular Categories</h2>
-            <p className="text-sm text-gray-500 mt-1">Bấm vào một danh mục để cuộn thẳng xuống phần gia sư</p>
+            <h2 className="text-3xl font-extrabold text-gray-900">{copy.categoriesTitle}</h2>
+            <p className="text-sm text-gray-500 mt-1">{copy.categoriesSub}</p>
           </div>
-          <button
-            onClick={() => setSelectedCategory("Tất cả")}
-            className="text-sm font-semibold text-[#0b63ff] hover:text-[#ff7a00] transition-colors"
-          >
-            Xem tất cả
-          </button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
@@ -254,7 +284,7 @@ export default function HomePage() {
                   setSelectedCategory(s);
                   featuredTutorsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
                 }}
-                className="group text-left rounded-3xl p-5 border bg-white border-gray-100 transition-all shadow-sm hover:shadow-xl hover:border-blue-200 hover:-translate-y-1"
+                className="group text-left rounded-3xl p-5 border bg-white dark:bg-slate-900 border-gray-100 dark:border-slate-800 transition-all shadow-sm hover:shadow-xl hover:border-blue-200 hover:-translate-y-1"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
@@ -274,8 +304,8 @@ export default function HomePage() {
       {/* Featured Tutors */}
       <div ref={featuredTutorsRef} data-scrollspy data-scroll-title="Gia sư nổi bật" className="max-w-6xl mx-auto mt-4 mb-16 px-4">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-extrabold text-gray-800 mb-2">Gia Sư Nổi Bật</h2>
-          <p className="text-gray-500">{selectedCategory === "Tất cả" ? "Discover experienced tutors who are ready to help you achieve your academic goals" : `Gia sư phù hợp cho danh mục ${selectedCategory}`}</p>
+          <h2 className="text-3xl font-extrabold text-gray-800 mb-2">{copy.tutorsTitle}</h2>
+          <p className="text-gray-500">{selectedCategory === "Tất cả" ? copy.tutorsSub : `Gia sư phù hợp cho danh mục ${selectedCategory}`}</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {featuredTutors.map(tutor => (
@@ -298,22 +328,10 @@ export default function HomePage() {
           ))}
         </div>
         {featuredTutors.length === 0 && (
-          <div className="text-center bg-white rounded-2xl border border-gray-100 py-12 text-gray-500 font-semibold">
+          <div className="text-center bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-800 py-12 text-gray-500 dark:text-gray-400 font-semibold">
             Không tìm thấy gia sư theo bộ lọc đã chọn.
           </div>
         )}
-      </div>
-
-      {/* How it works (anchor for scrolling) */}
-      <div data-scrollspy data-scroll-title="Cách hoạt động" className="max-w-5xl mx-auto py-12">
-        <h2 className="text-2xl font-bold text-center mb-4">Cách hoạt động</h2>
-        <p className="text-center text-gray-500">Mô tả ngắn về cách StudyHub kết nối gia sư và học viên.</p>
-      </div>
-
-      {/* Contact / Call to action (anchor) */}
-      <div data-scrollspy data-scroll-title="Liên hệ" className="max-w-5xl mx-auto py-12">
-        <h2 className="text-2xl font-bold text-center mb-4">Liên hệ</h2>
-        <p className="text-center text-gray-500">Liên hệ với chúng tôi để được hỗ trợ thêm.</p>
       </div>
 
       <Footer />
