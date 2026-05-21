@@ -42,10 +42,80 @@ function TutorCard({ tutor, onView }) {
   );
 }
 
+function TutorProfileDrawer({ tutor, open, onClose }) {
+  if (!open || !tutor) return null;
+
+  return (
+    <div className="fixed inset-0 z-50">
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" onClick={onClose} />
+      <aside className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl border-l border-gray-100 overflow-y-auto animate-in slide-in-from-right-6 duration-300">
+        <div className="p-6 border-b border-gray-100 flex items-start justify-between">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-600">Tutor Profile</p>
+            <h3 className="text-xl font-extrabold text-gray-900 mt-1">Thông tin gia sư</h3>
+          </div>
+          <button onClick={onClose} className="w-9 h-9 rounded-full hover:bg-gray-100 text-gray-500">×</button>
+        </div>
+
+        <div className="p-6 space-y-6">
+          <div className="flex items-center gap-4">
+            <Avatar initials={tutor.initials} bg={tutor.avatarBg} size="lg" />
+            <div>
+              <h4 className="text-lg font-bold text-gray-900">{tutor.name}</h4>
+              <p className="text-sm text-gray-500 mt-1">{tutor.title}</p>
+              <div className="flex items-center gap-2 mt-2 flex-wrap">
+                <SubjectBadge label={tutor.subject} colorClass={tutor.subjectColor} />
+                {tutor.verified && <VerifiedBadge />}
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-2xl border border-gray-100 bg-gray-50 p-4">
+              <p className="text-xs text-gray-500 font-semibold uppercase">Đánh giá</p>
+              <p className="text-lg font-extrabold text-gray-900 mt-1">{tutor.rating} / 5</p>
+            </div>
+            <div className="rounded-2xl border border-gray-100 bg-gray-50 p-4">
+              <p className="text-xs text-gray-500 font-semibold uppercase">Học phí</p>
+              <p className="text-lg font-extrabold text-gray-900 mt-1">{formatPrice(tutor.pricePerHour || tutor.hourlyRate)}</p>
+            </div>
+          </div>
+
+          <div>
+            <h5 className="text-sm font-bold text-gray-900 mb-2">Giới thiệu</h5>
+            <p className="text-sm text-gray-600 leading-relaxed">{tutor.bio}</p>
+          </div>
+
+          <div>
+            <h5 className="text-sm font-bold text-gray-900 mb-3">Kỹ năng</h5>
+            <div className="flex flex-wrap gap-2">
+              {(tutor.tags || []).map((tag) => (
+                <span key={tag} className="px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <button className="w-full rounded-2xl bg-blue-600 text-white font-bold py-3 hover:bg-blue-700 transition-colors">
+              Đặt lịch
+            </button>
+            <button className="w-full rounded-2xl border border-gray-200 text-gray-700 font-bold py-3 hover:bg-gray-50 transition-colors">
+              Nhắn tin
+            </button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  );
+}
+
 export default function TutorListingPage() {
   const navigate = useNavigate();
   const [tutors, setTutors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedTutor, setSelectedTutor] = useState(null);
 
   const [subject, setSubject] = useState("Tất cả");
   const [priceRange, setPriceRange] = useState(0);
@@ -107,13 +177,14 @@ export default function TutorListingPage() {
             {filtered.length === 0 ? (
               <div className="col-span-full text-center text-gray-500 font-semibold">Không tìm thấy gia sư.</div>
             ) : (
-              filtered.map(t => (
-                <TutorCard key={t.id} tutor={t} onView={() => navigate(`/tutors/${t.id}`)} />
+                filtered.map(t => (
+                <TutorCard key={t.id} tutor={t} onView={() => setSelectedTutor(t)} />
               ))
             )}
           </div>
         )}
       </div>
+      <TutorProfileDrawer tutor={selectedTutor} open={!!selectedTutor} onClose={() => setSelectedTutor(null)} />
       <Footer />
     </div>
   );

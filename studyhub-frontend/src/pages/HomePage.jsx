@@ -132,7 +132,7 @@ export default function HomePage() {
         <div className="flex items-end justify-between gap-4 mb-8">
           <div>
             <h2 className="text-3xl font-extrabold text-gray-900 text-left">Popular Categories</h2>
-            <p className="text-sm text-gray-500 mt-1">Bấm vào một danh mục để xem các gia sư phù hợp</p>
+            <p className="text-sm text-gray-500 mt-1">Bấm vào một danh mục để cuộn thẳng xuống phần gia sư</p>
           </div>
           <button
             onClick={() => setSelectedCategory("Tất cả")}
@@ -144,7 +144,6 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
           {SUBJECTS.map((s) => {
-            const active = selectedCategory === s;
             return (
               <button
                 key={s}
@@ -152,34 +151,24 @@ export default function HomePage() {
                   setSelectedCategory(s);
                   featuredTutorsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
                 }}
-                className={`group text-left rounded-3xl p-5 border transition-all shadow-sm hover:shadow-xl ${active ? "border-transparent bg-linear-to-br from-[#0b63ff] to-[#ff7a00] text-white" : "bg-white border-gray-100 hover:border-blue-200 hover:-translate-y-1"}`}
+                className="group text-left rounded-3xl p-5 border bg-white border-gray-100 transition-all shadow-sm hover:shadow-xl hover:border-blue-200 hover:-translate-y-1"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 ${active ? "bg-white/15" : "bg-blue-50"}`}>
-                      <span className={active ? "text-white" : "text-[#0b63ff]"}>📚</span>
+                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4 bg-blue-50">
+                      <span className="text-[#0b63ff]">📚</span>
                     </div>
-                    <h3 className={`text-lg font-bold mb-1 ${active ? "text-white" : "text-gray-900"}`}>{s}</h3>
-                    <p className={`text-sm ${active ? "text-white/80" : "text-gray-500"}`}>{categoryCounts[s] || 0} tutors</p>
+                    <h3 className="text-lg font-bold mb-1 text-gray-900">{s}</h3>
+                    <p className="text-sm text-gray-500">{categoryCounts[s] || 0} tutors</p>
                   </div>
-                  <span className={`text-xs font-semibold px-3 py-1 rounded-full ${active ? "bg-white/15 text-white" : "bg-gray-100 text-gray-500"}`}>
-                    {active ? "Đang xem" : "Chọn"}
+                  <span className="text-xs font-semibold px-3 py-1 rounded-full bg-gray-100 text-gray-500">
+                    Xem
                   </span>
                 </div>
               </button>
             );
           })}
         </div>
-
-        {selectedCategory !== "Tất cả" && (
-          <div className="mb-6 flex items-center justify-between gap-3 bg-blue-50 border border-blue-100 rounded-2xl px-4 py-3">
-            <div>
-              <p className="text-sm font-semibold text-[#0b63ff]">Đang lọc theo: {selectedCategory}</p>
-              <p className="text-xs text-gray-500">{featuredTutors.length} gia sư đang hiển thị</p>
-            </div>
-            <button onClick={() => setSelectedCategory("Tất cả")} className="text-sm font-semibold text-[#ff7a00] hover:underline">Bỏ lọc</button>
-          </div>
-        )}
       </div>
 
       {/* Featured Tutors */}
