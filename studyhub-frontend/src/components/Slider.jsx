@@ -83,6 +83,22 @@ export default function Slider({ className = "" }) {
               />
             ))}
           </div>
+
+          {/* Right vertical steps column */}
+          <div className="hidden md:flex flex-col items-center absolute right-6 top-1/2 -translate-y-1/2 space-y-6">
+            <div className="h-44 w-0.5 bg-white/30 rounded-full" />
+            <div className="flex flex-col items-center gap-4">
+              {slides.map((s, i) => (
+                <button key={s.id} onClick={() => setIndex(i)} className="flex items-center gap-3" aria-label={`Go to step ${i+1}`}>
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold ${i === index ? 'bg-white text-gray-800 shadow-lg' : 'bg-white/30 text-white'}`}>
+                    {i+1}
+                  </div>
+                  <div className={`text-xs text-white ${i === index ? 'font-bold' : 'opacity-80'}`}>{s.title}</div>
+                </button>
+              ))}
+            </div>
+            <div className="h-44 w-0.5 bg-white/30 rounded-full" />
+          </div>
         </div>
       </div>
     </div>
