@@ -36,7 +36,7 @@ export default function HomePage() {
       <Slider />
 
       {/* Banner + Search */}
-      <div className="relative bg-gradient-to-br from-blue-600 to-blue-400 py-16 px-4 text-center">
+      <div data-scrollspy data-scroll-title="Tìm gia sư" className="relative bg-gradient-to-br from-blue-600 to-blue-400 py-16 px-4 text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 drop-shadow-lg">Find Your Perfect Tutor</h1>
         <div className="flex flex-col md:flex-row justify-center gap-4 mb-8">
           <button
@@ -92,7 +92,7 @@ export default function HomePage() {
       </div>
 
       {/* Popular Categories */}
-      <div className="max-w-5xl mx-auto mt-12">
+      <div data-scrollspy data-scroll-title="Danh mục" className="max-w-5xl mx-auto mt-12">
         <h2 className="text-3xl font-extrabold text-green-600 text-center mb-8">Popular Categories</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 mb-12">
           {SUBJECTS.map(s => (
@@ -106,7 +106,7 @@ export default function HomePage() {
       </div>
 
       {/* Featured Tutors */}
-      <div ref={featuredTutorsRef} className="max-w-5xl mx-auto mt-4 mb-16">
+      <div ref={featuredTutorsRef} data-scrollspy data-scroll-title="Gia sư nổi bật" className="max-w-5xl mx-auto mt-4 mb-16">
         <h2 className="text-3xl font-extrabold text-gray-800 text-center mb-2">Gia Sư Nổi Bật</h2>
         <p className="text-center text-gray-500 mb-8">Discover experienced tutors who are ready to help you achieve your academic goals</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -129,6 +129,18 @@ export default function HomePage() {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* How it works (anchor for scrolling) */}
+      <div data-scrollspy data-scroll-title="Cách hoạt động" className="max-w-5xl mx-auto py-12">
+        <h2 className="text-2xl font-bold text-center mb-4">Cách hoạt động</h2>
+        <p className="text-center text-gray-500">Mô tả ngắn về cách StudyHub kết nối gia sư và học viên.</p>
+      </div>
+
+      {/* Contact / Call to action (anchor) */}
+      <div data-scrollspy data-scroll-title="Liên hệ" className="max-w-5xl mx-auto py-12">
+        <h2 className="text-2xl font-bold text-center mb-4">Liên hệ</h2>
+        <p className="text-center text-gray-500">Liên hệ với chúng tôi để được hỗ trợ thêm.</p>
       </div>
 
       <Footer />

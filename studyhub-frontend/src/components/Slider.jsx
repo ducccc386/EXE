@@ -45,10 +45,35 @@ const slides = [
 
 export default function Slider({ className = "" }) {
   const [index, setIndex] = useState(0);
+  const [sections, setSections] = useState(null);
+  const [activeSection, setActiveSection] = useState(null);
 
   useEffect(() => {
     const t = setInterval(() => setIndex((i) => (i + 1) % slides.length), 5000);
     return () => clearInterval(t);
+  }, []);
+
+  // Detect scrollspy sections on the page and observe them
+  useEffect(() => {
+    const els = Array.from(document.querySelectorAll('[data-scrollspy]'));
+    if (!els || els.length === 0) return;
+    const mapped = els.map((el, i) => ({ id: el.id || `scrollspy-${i}`, title: el.getAttribute('data-scroll-title') || el.id || `Section ${i + 1}`, el }));
+    setSections(mapped);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const idx = mapped.findIndex(m => m.el === entry.target);
+            if (idx >= 0) setActiveSection(idx);
+          }
+        });
+      },
+      { root: null, rootMargin: '-40% 0px -40% 0px', threshold: 0 }
+    );
+
+    mapped.forEach((m) => observer.observe(m.el));
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -86,18 +111,29 @@ export default function Slider({ className = "" }) {
 
           {/* Right vertical steps column */}
           <div className="hidden md:flex flex-col items-center absolute right-6 top-1/2 -translate-y-1/2 space-y-6">
-            <div className="h-44 w-0.5 bg-white/30 rounded-full" />
+            <div className="h-12 w-0.5 bg-white/30 rounded-full" />
             <div className="flex flex-col items-center gap-4">
-              {slides.map((s, i) => (
-                <button key={s.id} onClick={() => setIndex(i)} className="flex items-center gap-3" aria-label={`Go to step ${i+1}`}>
-                  <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold ${i === index ? 'bg-white text-gray-800 shadow-lg' : 'bg-white/30 text-white'}`}>
-                    {i+1}
-                  </div>
-                  <div className={`text-xs text-white ${i === index ? 'font-bold' : 'opacity-80'}`}>{s.title}</div>
-                </button>
-              ))}
+              {sections && sections.length > 0 ? (
+                sections.map((s, i) => (
+                  <button key={s.id} onClick={() => s.el.scrollIntoView({ behavior: 'smooth', block: 'center' })} className="flex items-center gap-3" aria-label={`Go to section ${i+1}`}>
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold ${i === activeSection ? 'bg-white text-gray-800 shadow-lg' : 'bg-white/30 text-white'}`}>
+                      {i+1}
+                    </div>
+                    <div className={`text-xs text-white max-w-[100px] text-left ${i === activeSection ? 'font-bold' : 'opacity-80'}`}>{s.title}</div>
+                  </button>
+                ))
+              ) : (
+                slides.map((s, i) => (
+                  <button key={s.id} onClick={() => setIndex(i)} className="flex items-center gap-3" aria-label={`Go to step ${i+1}`}>
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold ${i === index ? 'bg-white text-gray-800 shadow-lg' : 'bg-white/30 text-white'}`}>
+                      {i+1}
+                    </div>
+                    <div className={`text-xs text-white ${i === index ? 'font-bold' : 'opacity-80'}`}>{s.title}</div>
+                  </button>
+                ))
+              )}
             </div>
-            <div className="h-44 w-0.5 bg-white/30 rounded-full" />
+            <div className="h-12 w-0.5 bg-white/30 rounded-full" />
           </div>
         </div>
       </div>
