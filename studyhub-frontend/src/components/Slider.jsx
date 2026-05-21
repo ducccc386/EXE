@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLanguage } from "../hooks/usePreferences";
 
 const slides = [
   {
@@ -44,24 +45,35 @@ const slides = [
 ];
 
 export default function Slider({ className = "" }) {
+  const { lang } = useLanguage();
   const [index, setIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
+  const localized = slides.map((s) => {
+    if (lang === "vi") return s;
+
+    if (s.id === 1) return { ...s, title: "StudyHub - Connect knowledge", subtitle: "Connect knowledge, build trust", cta: "Discover", extra: "Learn more" };
+    if (s.id === 2) return { ...s, title: "Become a Frontend Developer", subtitle: "Modern Frontend with React.js", cta: "JOIN NOW", extra: "Learn more" };
+    if (s.id === 3) return { ...s, title: "Find the Right Tutor", subtitle: "Hundreds of quality tutors", cta: "Find now", extra: "Learn more" };
+    if (s.id === 4) return { ...s, title: "IELTS Preparation", subtitle: "Personalized roadmap", cta: "View course", extra: "Learn more" };
+    return { ...s, title: "Courses and Materials", subtitle: "High-quality resources, continuously updated", cta: "View resources", extra: "Learn more" };
+  });
+
   useEffect(() => {
     if (isPaused) return undefined;
-    const t = setInterval(() => setIndex((i) => (i + 1) % slides.length), 5000);
+    const t = setInterval(() => setIndex((i) => (i + 1) % localized.length), 5000);
     return () => clearInterval(t);
-  }, [isPaused]);
+  }, [isPaused, localized.length]);
 
   // keyboard navigation (left/right)
   useEffect(() => {
     const onKey = (e) => {
-      if (e.key === "ArrowLeft") setIndex((i) => (i - 1 + slides.length) % slides.length);
-      if (e.key === "ArrowRight") setIndex((i) => (i + 1) % slides.length);
+      if (e.key === "ArrowLeft") setIndex((i) => (i - 1 + localized.length) % localized.length);
+      if (e.key === "ArrowRight") setIndex((i) => (i + 1) % localized.length);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [localized.length]);
 
   // Slider only — scrollspy handled by StepsNav component on HomePage
 
@@ -73,7 +85,7 @@ export default function Slider({ className = "" }) {
     >
       <div className="w-full">
         <div className="relative h-64 md:h-72 lg:h-96 overflow-hidden" role="region" aria-label="Homepage banner">
-          {slides.map((s, i) => (
+          {localized.map((s, i) => (
             <div
               key={s.id}
               className={`absolute inset-0 transition-all duration-700 ease-in-out transform ${i === index ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-6 pointer-events-none"}`}
@@ -86,8 +98,13 @@ export default function Slider({ className = "" }) {
                     <h2 className="text-2xl md:text-4xl lg:text-5xl font-extrabold drop-shadow-md">{s.title}</h2>
                     <p className="mt-3 text-base md:text-lg opacity-95 max-w-2xl drop-shadow-sm">{s.subtitle}</p>
                     <div className="mt-6 flex items-center gap-4">
-                      <button className="inline-flex items-center gap-2 bg-gradient-to-r from-[#ff7a00] to-[#ff9a3c] text-white font-semibold px-5 py-3 rounded-full shadow-lg hover:scale-[1.02] transition-transform">{s.cta}</button>
-                      <button className="inline-flex items-center gap-2 bg-white text-[#0b63ff] font-medium px-4 py-2 rounded-full border border-white/30 hover:bg-white/95 transition-colors">Tìm hiểu thêm</button>
+                      <button
+                        className="inline-flex items-center gap-2 text-white font-semibold px-5 py-3 rounded-full shadow-lg hover:scale-[1.02] transition-transform"
+                        style={{ background: "linear-gradient(90deg,#ff7a00 0%, #ff9a3c 100%)" }}
+                      >
+                        {s.cta}
+                      </button>
+                      <button className="inline-flex items-center gap-2 bg-white text-[#0b63ff] font-medium px-4 py-2 rounded-full border border-white/30 hover:bg-white/95 transition-colors">{s.extra || "Tìm hiểu thêm"}</button>
                     </div>
                   </div>
                 </div>
@@ -98,7 +115,7 @@ export default function Slider({ className = "" }) {
           {/* left / right arrows */}
           <button
             aria-label="Previous slide"
-            onClick={() => setIndex((index - 1 + slides.length) % slides.length)}
+            onClick={() => setIndex((index - 1 + localized.length) % localized.length)}
             className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white/20 text-white absolute left-4 top-1/2 -translate-y-1/2 shadow-lg hover:bg-white/30 transition-colors"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="stroke-current">
@@ -108,7 +125,7 @@ export default function Slider({ className = "" }) {
 
           <button
             aria-label="Next slide"
-            onClick={() => setIndex((index + 1) % slides.length)}
+            onClick={() => setIndex((index + 1) % localized.length)}
             className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white/20 text-white absolute right-4 top-1/2 -translate-y-1/2 shadow-lg hover:bg-white/30 transition-colors"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="stroke-current">
@@ -117,7 +134,7 @@ export default function Slider({ className = "" }) {
           </button>
 
           <div className="absolute left-6 bottom-6 flex items-center gap-3">
-            {slides.map((s, i) => (
+            {localized.map((s, i) => (
               <button
                 key={s.id}
                 onClick={() => setIndex(i)}

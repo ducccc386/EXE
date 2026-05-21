@@ -7,7 +7,7 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { logout } from "../../services/authService";
-import { ROUTES, ROLE_DASHBOARD } from "../../constants";
+import { ROUTES } from "../../constants";
 import mainLogo from "../../assets/studyhub.jpg";
 import { useLanguage, useTheme } from "../../hooks/usePreferences";
 

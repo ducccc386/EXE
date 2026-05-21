@@ -8,7 +8,8 @@ function getStoredLanguage() {
 }
 
 function getStoredTheme() {
-  return localStorage.getItem(THEME_KEY) || "light";
+  const raw = localStorage.getItem(THEME_KEY);
+  return raw === "dark" || raw === "light" ? raw : "light";
 }
 
 function emitChange(eventName) {
@@ -45,7 +46,10 @@ export function useTheme() {
   const [theme, setThemeState] = useState(getStoredTheme);
 
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark");
+    const isDark = theme === "dark";
+    document.documentElement.classList.toggle("dark", isDark);
+    document.documentElement.setAttribute("data-theme", theme);
+    document.body.classList.toggle("dark", isDark);
     const onStorage = () => setThemeState(getStoredTheme());
     const onCustom = () => setThemeState(getStoredTheme());
     window.addEventListener("storage", onStorage);
@@ -57,8 +61,9 @@ export function useTheme() {
   }, [theme]);
 
   const setTheme = (nextTheme) => {
-    localStorage.setItem(THEME_KEY, nextTheme);
-    setThemeState(nextTheme);
+    const safeTheme = nextTheme === "dark" ? "dark" : "light";
+    localStorage.setItem(THEME_KEY, safeTheme);
+    setThemeState(safeTheme);
     emitChange("studyhub-theme-change");
   };
 

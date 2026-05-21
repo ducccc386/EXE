@@ -68,16 +68,21 @@ const matchesFilters = (tutor, filters) => {
 };
 
 function TutorProfileDrawer({ tutor, open, onClose }) {
+  const { lang } = useLanguage();
   if (!open || !tutor) return null;
+
+  const t = lang === "vi"
+    ? { title: "Thông tin gia sư", rating: "Đánh giá", price: "Học phí", about: "Giới thiệu", skills: "Kỹ năng", empty: "Chưa có mô tả", profile: "Hồ sơ gia sư", viewProfile: "Xem hồ sơ", contact: "Liên hệ" }
+    : { title: "Tutor Info", rating: "Rating", price: "Price", about: "About", skills: "Skills", empty: "No description", profile: "Tutor Profile", viewProfile: "View Profile", contact: "Contact" };
 
   return (
     <div className="fixed inset-0 z-50">
       <div className="absolute inset-0 bg-black/45 backdrop-blur-[2px]" onClick={onClose} />
-      <aside className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl border-l border-gray-100 overflow-y-auto animate-in slide-in-from-right-6 duration-300">
-        <div className="p-6 border-b border-gray-100 flex items-start justify-between">
+      <aside className="absolute right-0 top-0 h-full w-full max-w-md bg-white dark:bg-slate-900 shadow-2xl border-l border-gray-100 dark:border-slate-800 overflow-y-auto animate-in slide-in-from-right-6 duration-300">
+        <div className="p-6 border-b border-gray-100 dark:border-slate-800 flex items-start justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-600">Tutor Profile</p>
-            <h3 className="text-xl font-extrabold text-gray-900 mt-1">Thông tin gia sư</h3>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-600">{t.profile}</p>
+            <h3 className="text-xl font-extrabold text-gray-900 dark:text-white mt-1">{t.title}</h3>
           </div>
           <button onClick={onClose} className="w-9 h-9 rounded-full hover:bg-gray-100 text-gray-500">×</button>
         </div>
@@ -87,35 +92,40 @@ function TutorProfileDrawer({ tutor, open, onClose }) {
               {tutor.avatar || tutor.initials || "GS"}
             </div>
             <div>
-              <h4 className="text-lg font-bold text-gray-900">{tutor.name}</h4>
-              <p className="text-sm text-gray-500">{tutor.title}</p>
+              <h4 className="text-lg font-bold text-gray-900 dark:text-white">{tutor.name}</h4>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{tutor.title}</p>
               <p className="text-sm text-blue-600 font-semibold mt-1">{tutor.subject}</p>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-2xl border border-gray-100 bg-gray-50 p-3">
-              <p className="text-xs text-gray-500 font-semibold uppercase">Đánh giá</p>
-              <p className="text-lg font-extrabold text-gray-900 mt-1">{tutor.rating || 0} / 5</p>
+            <div className="rounded-2xl border border-gray-100 dark:border-slate-800 bg-gray-50 dark:bg-slate-800 p-3">
+              <p className="text-xs text-gray-500 font-semibold uppercase">{t.rating}</p>
+              <p className="text-lg font-extrabold text-gray-900 dark:text-white mt-1">{tutor.rating || 0} / 5</p>
             </div>
-            <div className="rounded-2xl border border-gray-100 bg-gray-50 p-3">
-              <p className="text-xs text-gray-500 font-semibold uppercase">Học phí</p>
-              <p className="text-lg font-extrabold text-gray-900 mt-1">{(tutor.pricePerHour || tutor.hourlyRate || 0).toLocaleString()}đ</p>
+            <div className="rounded-2xl border border-gray-100 dark:border-slate-800 bg-gray-50 dark:bg-slate-800 p-3">
+              <p className="text-xs text-gray-500 font-semibold uppercase">{t.price}</p>
+              <p className="text-lg font-extrabold text-gray-900 dark:text-white mt-1">{(tutor.pricePerHour || tutor.hourlyRate || 0).toLocaleString()}đ</p>
             </div>
           </div>
 
           <div>
-            <h5 className="text-sm font-bold text-gray-900 mb-2">Giới thiệu</h5>
-            <p className="text-sm text-gray-600 leading-relaxed">{tutor.bio || "Chưa có mô tả"}</p>
+            <h5 className="text-sm font-bold text-gray-900 dark:text-white mb-2">{t.about}</h5>
+            <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{tutor.bio || t.empty}</p>
           </div>
 
           <div>
-            <h5 className="text-sm font-bold text-gray-900 mb-2">Kỹ năng</h5>
+            <h5 className="text-sm font-bold text-gray-900 dark:text-white mb-2">{t.skills}</h5>
             <div className="flex flex-wrap gap-2">
               {(tutor.tags || []).map((tag) => (
                 <span key={tag} className="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold">{tag}</span>
               ))}
             </div>
+          </div>
+
+          <div className="flex items-center gap-2 pt-2">
+            <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold">{t.viewProfile}</button>
+            <button className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-bold">{t.contact}</button>
           </div>
         </div>
       </aside>
@@ -267,7 +277,7 @@ export default function HomePage() {
       </div>
 
       {/* Popular Categories */}
-      <div data-scrollspy data-scroll-title="Danh mục" className="max-w-6xl mx-auto mt-12 px-4">
+      <div data-scrollspy data-scroll-title={copy.categoriesTitle} className="max-w-6xl mx-auto mt-12 px-4">
         <div className="flex flex-col items-center text-center gap-2 mb-8">
           <div>
             <h2 className="text-3xl font-extrabold text-gray-900">{copy.categoriesTitle}</h2>
@@ -302,27 +312,27 @@ export default function HomePage() {
       </div>
 
       {/* Featured Tutors */}
-      <div ref={featuredTutorsRef} data-scrollspy data-scroll-title="Gia sư nổi bật" className="max-w-6xl mx-auto mt-4 mb-16 px-4">
+      <div ref={featuredTutorsRef} data-scrollspy data-scroll-title={copy.tutorsTitle} className="max-w-6xl mx-auto mt-4 mb-16 px-4">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-extrabold text-gray-800 mb-2">{copy.tutorsTitle}</h2>
           <p className="text-gray-500">{selectedCategory === "Tất cả" ? copy.tutorsSub : `Gia sư phù hợp cho danh mục ${selectedCategory}`}</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {featuredTutors.map(tutor => (
-            <div key={tutor.id} className="bg-white rounded-2xl shadow p-6 flex flex-col items-center">
+            <div key={tutor.id} className="bg-white dark:bg-slate-900 rounded-2xl shadow p-6 flex flex-col items-center border border-transparent dark:border-slate-800">
               <div className="w-24 h-24 bg-gray-200 rounded-full mb-4 flex items-center justify-center text-4xl text-blue-600">
                 {tutor.avatar || tutor.initials || "👤"}
               </div>
-              <div className="font-bold text-lg text-gray-900 mb-1">{tutor.name}</div>
-              <div className="text-sm text-gray-500 mb-1">{tutor.location || "-"}</div>
-              <div className="text-sm text-gray-500 mb-1">{tutor.university || "-"}</div>
+              <div className="font-bold text-lg text-gray-900 dark:text-white mb-1">{tutor.name}</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">{tutor.location || "-"}</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">{tutor.university || "-"}</div>
               <div className="text-blue-600 font-bold mb-1">{tutor.pricePerHour ? tutor.pricePerHour.toLocaleString() + "/hour" : "-"}</div>
               <div className="flex flex-wrap gap-2 mb-2">
                 <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs">{tutor.subject}</span>
               </div>
               <div className="flex gap-2 mt-2">
-                <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-bold" onClick={() => setSelectedTutor(tutor)}>View Profile</button>
-                <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-bold">Contact</button>
+                <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-bold" onClick={() => setSelectedTutor(tutor)}>{lang === "vi" ? "Xem hồ sơ" : "View Profile"}</button>
+                <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-bold">{lang === "vi" ? "Liên hệ" : "Contact"}</button>
               </div>
             </div>
           ))}
