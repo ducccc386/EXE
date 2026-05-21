@@ -64,9 +64,9 @@ export default function Slider({ className = "" }) {
             >
               <div className="w-full h-full">
                 <div className="absolute inset-0 bg-center bg-cover" style={{ backgroundImage: `url(${s.image})` }} />
-                <div className={`absolute inset-0 ${s.bg !== 'bg-white' ? s.bg.replace('bg-gradient-to-r ', '') : ''} opacity-60`} />
+                <div className="absolute inset-0 bg-black/45" />
                 <div className="relative z-10 max-w-7xl mx-auto h-full flex items-center p-6 md:p-10">
-                  <div className={`flex-1 ${s.bg === 'bg-white' ? 'text-gray-900' : 'text-white'}`}>
+                  <div className="flex-1 text-white">
                     <h2 className="text-xl md:text-2xl lg:text-3xl font-extrabold">{s.title}</h2>
                     <p className="mt-2 text-sm md:text-base opacity-90">{s.subtitle}</p>
                     <button className="mt-4 inline-block bg-white text-gray-800 font-semibold px-4 py-2 rounded-full shadow">{s.cta}</button>
