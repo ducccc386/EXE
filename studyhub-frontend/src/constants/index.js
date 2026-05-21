@@ -45,6 +45,8 @@ export const ROUTES = {
   HOME:             "/",
   LOGIN:            "/login",
   REGISTER:         "/register",
+  HELP:             "/help",
+  PROFILE:          "/profile",
   TUTORS:           "/tutors",
   TUTOR_PROFILE:    (id) => `/tutors/${id}`,
   NEWS:             "/news",

@@ -34,6 +34,94 @@ const matchesCategory = (tutor, category) => {
   return aliases.some((alias) => subject.includes(alias) || title.includes(alias) || tags.some((tag) => tag.includes(alias)));
 };
 
+const normalize = (v) => String(v || "").trim().toLowerCase();
+
+const matchesFilters = (tutor, filters) => {
+  const keyword = normalize(filters.keyword);
+  const location = normalize(filters.location);
+  const subject = normalize(filters.subject);
+  const style = normalize(filters.style).replace(/^#/, "");
+  const gender = normalize(filters.gender);
+  const tutorSubject = normalize(tutor.subject);
+  const tutorTitle = normalize(tutor.title);
+  const tutorLocation = normalize(tutor.location);
+  const tutorTags = (tutor.tags || []).map(normalize);
+  const tutorStyles = (tutor.styles || []).map(normalize);
+  const tutorGender = normalize(tutor.gender || "all");
+  const tutorPrice = tutor.pricePerHour || tutor.hourlyRate || 0;
+
+  const matchKeyword =
+    !keyword ||
+    normalize(tutor.name).includes(keyword) ||
+    tutorSubject.includes(keyword) ||
+    tutorTitle.includes(keyword) ||
+    tutorTags.some((tag) => tag.includes(keyword));
+
+  const matchSubject = !subject || matchesCategory(tutor, filters.subject);
+  const matchLocation = !location || tutorLocation.includes(location);
+  const matchStyle = !style || tutorStyles.some((s) => s.includes(style)) || tutorTags.some((t) => t.includes(style));
+  const matchGender = gender === "all" || tutorGender === gender;
+  const matchPrice = tutorPrice >= filters.price[0] && tutorPrice <= filters.price[1];
+
+  return matchKeyword && matchSubject && matchLocation && matchStyle && matchGender && matchPrice;
+};
+
+function TutorProfileDrawer({ tutor, open, onClose }) {
+  if (!open || !tutor) return null;
+
+  return (
+    <div className="fixed inset-0 z-50">
+      <div className="absolute inset-0 bg-black/45 backdrop-blur-[2px]" onClick={onClose} />
+      <aside className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl border-l border-gray-100 overflow-y-auto animate-in slide-in-from-right-6 duration-300">
+        <div className="p-6 border-b border-gray-100 flex items-start justify-between">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-600">Tutor Profile</p>
+            <h3 className="text-xl font-extrabold text-gray-900 mt-1">Thông tin gia sư</h3>
+          </div>
+          <button onClick={onClose} className="w-9 h-9 rounded-full hover:bg-gray-100 text-gray-500">×</button>
+        </div>
+        <div className="p-6 space-y-5">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 rounded-full bg-blue-100 text-blue-700 font-black text-xl flex items-center justify-center">
+              {tutor.avatar || tutor.initials || "GS"}
+            </div>
+            <div>
+              <h4 className="text-lg font-bold text-gray-900">{tutor.name}</h4>
+              <p className="text-sm text-gray-500">{tutor.title}</p>
+              <p className="text-sm text-blue-600 font-semibold mt-1">{tutor.subject}</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-2xl border border-gray-100 bg-gray-50 p-3">
+              <p className="text-xs text-gray-500 font-semibold uppercase">Đánh giá</p>
+              <p className="text-lg font-extrabold text-gray-900 mt-1">{tutor.rating || 0} / 5</p>
+            </div>
+            <div className="rounded-2xl border border-gray-100 bg-gray-50 p-3">
+              <p className="text-xs text-gray-500 font-semibold uppercase">Học phí</p>
+              <p className="text-lg font-extrabold text-gray-900 mt-1">{(tutor.pricePerHour || tutor.hourlyRate || 0).toLocaleString()}đ</p>
+            </div>
+          </div>
+
+          <div>
+            <h5 className="text-sm font-bold text-gray-900 mb-2">Giới thiệu</h5>
+            <p className="text-sm text-gray-600 leading-relaxed">{tutor.bio || "Chưa có mô tả"}</p>
+          </div>
+
+          <div>
+            <h5 className="text-sm font-bold text-gray-900 mb-2">Kỹ năng</h5>
+            <div className="flex flex-wrap gap-2">
+              {(tutor.tags || []).map((tag) => (
+                <span key={tag} className="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold">{tag}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  );
+}
+
 export default function HomePage() {
   const [keyword, setKeyword] = useState("");
   const [subject, setSubject] = useState("");
@@ -42,6 +130,15 @@ export default function HomePage() {
   const [price, setPrice] = useState([50000, 1000000]);
   const [gender, setGender] = useState("All");
   const [selectedCategory, setSelectedCategory] = useState("Tất cả");
+  const [appliedFilters, setAppliedFilters] = useState({
+    keyword: "",
+    subject: "",
+    location: "",
+    style: "",
+    price: [50000, 1000000],
+    gender: "All",
+  });
+  const [selectedTutor, setSelectedTutor] = useState(null);
   const navigate = useNavigate();
 
 
@@ -50,12 +147,18 @@ export default function HomePage() {
   // Lọc gia sư nổi bật (giả lập, lấy 3 người đầu)
   const featuredTutors = tutors
     .filter((tutor) => matchesCategory(tutor, selectedCategory))
-    .slice(0, 3);
+    .filter((tutor) => matchesFilters(tutor, appliedFilters))
+    .slice(0, 6);
 
   const categoryCounts = SUBJECTS.reduce((acc, category) => {
     acc[category] = tutors.filter((tutor) => matchesCategory(tutor, category)).length;
     return acc;
   }, {});
+
+  const handleSearch = () => {
+    setAppliedFilters({ keyword, subject, location, style, price: [...price], gender });
+    featuredTutorsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -89,7 +192,7 @@ export default function HomePage() {
                 {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
               <input type="text" placeholder="Location (e.g., Ha Noi)" value={location} onChange={e => setLocation(e.target.value)} className="w-56 px-5 py-3 rounded-full border border-white/20 shadow-inner placeholder-gray-400 focus:ring-2 focus:ring-[#0b63ff] outline-none" />
-              <button className="bg-linear-to-r from-[#ff7a00] to-[#ff9a3c] text-white font-bold px-6 py-3 rounded-full shadow-lg hover:brightness-95 transition">Search</button>
+              <button onClick={handleSearch} className="bg-linear-to-r from-[#ff7a00] to-[#ff9a3c] text-white font-bold px-6 py-3 rounded-full shadow-lg hover:brightness-95 transition">Search</button>
             </div>
 
             <div className="flex flex-wrap gap-3 items-center mt-2">
@@ -129,9 +232,9 @@ export default function HomePage() {
 
       {/* Popular Categories */}
       <div data-scrollspy data-scroll-title="Danh mục" className="max-w-6xl mx-auto mt-12 px-4">
-        <div className="flex items-end justify-between gap-4 mb-8">
+        <div className="flex flex-col items-center text-center gap-2 mb-8">
           <div>
-            <h2 className="text-3xl font-extrabold text-gray-900 text-left">Popular Categories</h2>
+            <h2 className="text-3xl font-extrabold text-gray-900">Popular Categories</h2>
             <p className="text-sm text-gray-500 mt-1">Bấm vào một danh mục để cuộn thẳng xuống phần gia sư</p>
           </div>
           <button
@@ -161,9 +264,6 @@ export default function HomePage() {
                     <h3 className="text-lg font-bold mb-1 text-gray-900">{s}</h3>
                     <p className="text-sm text-gray-500">{categoryCounts[s] || 0} tutors</p>
                   </div>
-                  <span className="text-xs font-semibold px-3 py-1 rounded-full bg-gray-100 text-gray-500">
-                    Xem
-                  </span>
                 </div>
               </button>
             );
@@ -191,12 +291,17 @@ export default function HomePage() {
                 <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs">{tutor.subject}</span>
               </div>
               <div className="flex gap-2 mt-2">
-                <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-bold" onClick={() => navigate(`/tutors/${tutor.id}`)}>View Profile</button>
+                <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-bold" onClick={() => setSelectedTutor(tutor)}>View Profile</button>
                 <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-bold">Contact</button>
               </div>
             </div>
           ))}
         </div>
+        {featuredTutors.length === 0 && (
+          <div className="text-center bg-white rounded-2xl border border-gray-100 py-12 text-gray-500 font-semibold">
+            Không tìm thấy gia sư theo bộ lọc đã chọn.
+          </div>
+        )}
       </div>
 
       {/* How it works (anchor for scrolling) */}
@@ -212,6 +317,7 @@ export default function HomePage() {
       </div>
 
       <Footer />
+      <TutorProfileDrawer tutor={selectedTutor} open={!!selectedTutor} onClose={() => setSelectedTutor(null)} />
     </div>
   );
 }

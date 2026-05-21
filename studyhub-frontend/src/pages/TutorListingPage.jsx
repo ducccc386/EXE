@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import { VerifiedBadge, StarRating, Avatar, SubjectBadge, formatPrice } from "../components/ui";
@@ -112,7 +111,6 @@ function TutorProfileDrawer({ tutor, open, onClose }) {
 }
 
 export default function TutorListingPage() {
-  const navigate = useNavigate();
   const [tutors, setTutors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTutor, setSelectedTutor] = useState(null);
