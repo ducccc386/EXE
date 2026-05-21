@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import { useLanguage } from "../hooks/usePreferences";
@@ -31,6 +32,7 @@ const HELP_SECTIONS = [
 
 export default function HelpPage() {
   const { lang } = useLanguage();
+  const [activeId, setActiveId] = useState(HELP_SECTIONS[0].id);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-950 dark:text-slate-100">
@@ -42,11 +44,12 @@ export default function HelpPage() {
             <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl p-4 sticky top-24 shadow-sm">
               <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 mb-4">Help Menu</h2>
               <div className="space-y-2">
-                {HELP_SECTIONS.map((item, idx) => (
+                {HELP_SECTIONS.map((item) => (
                   <a
                     key={item.id}
                     href={`#${item.id}`}
-                    className={`block rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors ${idx === 0 ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-blue-50 hover:text-blue-700 dark:text-gray-300 dark:hover:bg-slate-800 dark:hover:text-blue-300"}`}
+                    onClick={() => setActiveId(item.id)}
+                    className={`block rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors ${activeId === item.id ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-blue-50 hover:text-blue-700 dark:text-gray-300 dark:hover:bg-slate-800 dark:hover:text-blue-300"}`}
                   >
                     {item.title[lang]}
                   </a>

@@ -8,15 +8,55 @@ import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import { login } from "../services/authService";
 import { ROUTES, ROLE_DASHBOARD } from "../constants";
+import { useLanguage } from "../hooks/usePreferences";
+
+const T = {
+  vi: {
+    welcome: "Chào mừng trở lại!",
+    subtitle: "Kết nối tri thức, nâng bước tương lai",
+    demoLabel: "Đăng nhập nhanh (Demo)",
+    demoAccounts: ["Admin", "Gia sư", "Phụ huynh"],
+    divider: "hoặc đăng nhập thủ công",
+    emailLabel: "Email",
+    passwordLabel: "Mật khẩu",
+    forgotPassword: "Quên mật khẩu?",
+    loginBtn: "ĐĂNG NHẬP",
+    loggingIn: "Đang đăng nhập...",
+    noAccount: "Bạn là người mới?",
+    register: "Đăng ký tài khoản",
+    demoError: "Lỗi đăng nhập demo. Vui lòng thử lại.",
+    loginError: "Đăng nhập thất bại. Vui lòng kiểm tra lại!",
+    serverError: "Lỗi kết nối tới máy chủ.",
+  },
+  en: {
+    welcome: "Welcome back!",
+    subtitle: "Connect knowledge, elevate your future",
+    demoLabel: "Quick Login (Demo)",
+    demoAccounts: ["Admin", "Tutor", "Parent"],
+    divider: "or login manually",
+    emailLabel: "Email",
+    passwordLabel: "Password",
+    forgotPassword: "Forgot password?",
+    loginBtn: "LOGIN",
+    loggingIn: "Logging in...",
+    noAccount: "New here?",
+    register: "Create an account",
+    demoError: "Demo login failed. Please try again.",
+    loginError: "Login failed. Please check your credentials!",
+    serverError: "Server connection error.",
+  },
+};
 
 const DEMO_ACCOUNTS = [
-  { label: "Admin",     email: "admin@studyhub.vn",  password: "admin123",  color: "bg-purple-100 text-purple-700 border-purple-200",  icon: "🛡️" },
-  { label: "Gia sư",   email: "tutor@studyhub.vn",  password: "tutor123",  color: "bg-blue-100 text-blue-700 border-blue-200",        icon: "👨‍🏫" },
-  { label: "Phụ huynh",email: "parent@studyhub.vn", password: "parent123", color: "bg-orange-100 text-orange-700 border-orange-200",   icon: "👨‍👧" },
+  { labelKey: 0, email: "admin@studyhub.vn",  password: "admin123",  color: "bg-purple-100 text-purple-700 border-purple-200",  icon: "🛡️" },
+  { labelKey: 1, email: "tutor@studyhub.vn",  password: "tutor123",  color: "bg-blue-100 text-blue-700 border-blue-200",        icon: "👨‍🏫" },
+  { labelKey: 2, email: "parent@studyhub.vn", password: "parent123", color: "bg-orange-100 text-orange-700 border-orange-200",   icon: "👨‍👧" },
 ];
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { lang } = useLanguage();
+  const t = T[lang];
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError]       = useState("");
   const [loading, setLoading]   = useState(false);
@@ -31,8 +71,8 @@ export default function LoginPage() {
     } catch (err) {
       const msg = err.response?.data?.message
         || err.response?.data
-        || "Đăng nhập thất bại. Vui lòng kiểm tra lại!";
-      setError(typeof msg === "string" ? msg : "Lỗi kết nối tới máy chủ.");
+        || t.loginError;
+      setError(typeof msg === "string" ? msg : t.serverError);
     } finally {
       setLoading(false);
     }
@@ -48,7 +88,7 @@ export default function LoginPage() {
       const data = await login(next.email, next.password);
       navigate(ROLE_DASHBOARD[data.role] ?? ROUTES.HOME);
     } catch (err) {
-      setError("Lỗi đăng nhập demo. Vui lòng thử lại.");
+      setError(t.demoError);
     } finally {
       setLoading(false);
     }
@@ -72,26 +112,26 @@ export default function LoginPage() {
               </div>
               <span className="text-xl font-extrabold tracking-tight">StudyHub</span>
             </div>
-            <h1 className="text-2xl font-extrabold">Chào mừng trở lại!</h1>
-            <p className="text-blue-100 text-sm mt-1">Kết nối tri thức, nâng bước tương lai</p>
+            <h1 className="text-2xl font-extrabold">{t.welcome}</h1>
+            <p className="text-blue-100 text-sm mt-1">{t.subtitle}</p>
           </div>
 
           <div className="px-8 py-7">
             {/* Demo quick-login */}
             <div className="mb-6">
               <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
-                Đăng nhập nhanh (Demo)
+                {t.demoLabel}
               </p>
               <div className="grid grid-cols-3 gap-2">
                 {DEMO_ACCOUNTS.map((acc) => (
                   <button
-                    key={acc.label}
+                    key={acc.labelKey}
                     onClick={() => handleDemoLogin(acc)}
                     disabled={loading}
                     className={`flex flex-col items-center gap-1.5 px-2 py-3 rounded-2xl border-2 font-bold text-xs transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${acc.color}`}
                   >
                     <span className="text-xl">{acc.icon}</span>
-                    {acc.label}
+                    {t.demoAccounts[acc.labelKey]}
                   </button>
                 ))}
               </div>
@@ -100,14 +140,14 @@ export default function LoginPage() {
             {/* Divider */}
             <div className="flex items-center gap-3 mb-6">
               <div className="flex-1 h-px bg-gray-100" />
-              <span className="text-xs text-gray-400 font-medium">hoặc đăng nhập thủ công</span>
+              <span className="text-xs text-gray-400 font-medium">{t.divider}</span>
               <div className="flex-1 h-px bg-gray-100" />
             </div>
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1.5">Email</label>
+                <label className="block text-sm font-bold text-gray-700 mb-1.5">{t.emailLabel}</label>
                 <input
                   type="email"
                   required
@@ -120,8 +160,8 @@ export default function LoginPage() {
 
               <div>
                 <div className="flex justify-between items-center mb-1.5">
-                  <label className="block text-sm font-bold text-gray-700">Mật khẩu</label>
-                  <a href="#" className="text-xs font-semibold text-blue-600 hover:text-blue-700">Quên mật khẩu?</a>
+                  <label className="block text-sm font-bold text-gray-700">{t.passwordLabel}</label>
+                  <a href="#" className="text-xs font-semibold text-blue-600 hover:text-blue-700">{t.forgotPassword}</a>
                 </div>
                 <input
                   type="password"
@@ -155,16 +195,16 @@ export default function LoginPage() {
                       <path className="opacity-75" fill="currentColor"
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
-                    Đang đăng nhập...
+                    {t.loggingIn}
                   </>
-                ) : "ĐĂNG NHẬP"}
+                ) : t.loginBtn}
               </button>
             </form>
 
             <p className="text-sm text-gray-500 font-medium text-center mt-5">
-              Bạn là người mới?{" "}
+              {t.noAccount}{" "}
               <Link to="/register" className="text-orange-500 font-bold hover:text-orange-600 underline underline-offset-4">
-                Đăng ký tài khoản
+                {t.register}
               </Link>
             </p>
           </div>
