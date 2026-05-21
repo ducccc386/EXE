@@ -4,6 +4,7 @@ import Footer from "../components/layout/Footer";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { tutors } from "../data/tutors";
+import Slider from "../components/Slider";
 
 
 const SUBJECTS = [
@@ -32,6 +33,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
+      <Slider />
 
       {/* Banner + Search */}
       <div className="relative bg-gradient-to-br from-blue-600 to-blue-400 py-16 px-4 text-center">
