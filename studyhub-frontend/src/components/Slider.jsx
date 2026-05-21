@@ -3,6 +3,14 @@ import React, { useState, useEffect } from "react";
 const slides = [
   {
     id: 1,
+    title: "StudyHub - Kết nối tri thức",
+    subtitle: "Kết nối tri thức, xây dựng niềm tin",
+    cta: "Tìm hiểu",
+    image: "/assets/slider/banner.jpg",
+    bg: "bg-white",
+  },
+  {
+    id: 2,
     title: "Trở Thành Lập Trình Viên Frontend",
     subtitle: "Frontend Hiện Đại Với React.js",
     cta: "ĐĂNG KÝ NGAY",
@@ -10,7 +18,7 @@ const slides = [
     bg: "bg-gradient-to-r from-blue-600 to-purple-500",
   },
   {
-    id: 2,
+    id: 3,
     title: "Tìm Gia Sư Phù Hợp",
     subtitle: "Hàng trăm gia sư chất lượng",
     cta: "Tìm ngay",
@@ -18,12 +26,20 @@ const slides = [
     bg: "bg-gradient-to-r from-green-400 to-blue-500",
   },
   {
-    id: 3,
+    id: 4,
     title: "Luyện Thi IELTS",
     subtitle: "Lộ trình cá nhân hóa",
     cta: "Xem khóa học",
     image: "/assets/slider/ielts.jpg",
     bg: "bg-gradient-to-r from-orange-400 to-pink-400",
+  },
+  {
+    id: 5,
+    title: "Khóa Học và Tài Liệu",
+    subtitle: "Tài liệu chất lượng, cập nhật liên tục",
+    cta: "Xem tài liệu",
+    image: "/assets/slider/react-course.jpg",
+    bg: "bg-gradient-to-r from-indigo-500 to-blue-500",
   },
 ];
 
