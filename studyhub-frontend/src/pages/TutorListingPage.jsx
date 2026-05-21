@@ -5,6 +5,7 @@ import Footer from "../components/layout/Footer";
 import { VerifiedBadge, StarRating, Avatar, SubjectBadge, formatPrice } from "../components/ui";
 import { getTutors } from "../services/tutorService";
 import { SUBJECTS, PRICE_RANGES } from "../data/tutors";
+import Slider from "../components/Slider";
 
 function TutorCard({ tutor, onView }) {
   return (
@@ -82,6 +83,9 @@ export default function TutorListingPage() {
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
       <Navbar />
+      <div className="pt-6">
+        <Slider />
+      </div>
       <div className="max-w-7xl mx-auto px-4 py-10">
         <h1 className="text-3xl md:text-4xl font-extrabold mb-6 text-center">Tìm gia sư phù hợp</h1>
 
