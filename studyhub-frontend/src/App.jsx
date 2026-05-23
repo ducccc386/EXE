@@ -12,6 +12,7 @@ import TutorProfilePage      from "./pages/tutor/TutorProfilePage";
 import TutorDashboardPage    from "./pages/tutor/TutorDashboardPage";
 import AdminDashboardPage    from "./pages/admin/AdminDashboardPage";
 import ParentDashboardPage   from "./pages/parent/ParentDashboardPage";
+import ChatPage              from "./pages/ChatPage";
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
         <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
         <Route path={ROUTES.TUTORS}  element={<TutorListingPage />} />
         <Route path="/tutors/:id"    element={<TutorProfilePage />} />
+        <Route path="/chat"          element={<ChatPage />} />
 
         {/* ── Protected: Tutor ───────────────────────────────────── */}
         <Route

@@ -371,7 +371,7 @@ export default function HomePage() {
           >
             {copy.heroFind}
           </button>
-          <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-4 rounded-xl shadow transition-all text-lg border-2 border-white/30" onClick={() => navigate("/register")}>{copy.heroBecome}</button>
+          <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-4 rounded-xl shadow transition-all text-lg border-2 border-white/30" onClick={() => navigate("/login")}>{copy.heroBecome}</button>
         </div>
         {/* Search Filters */}
         <div className="max-w-5xl mx-auto">
