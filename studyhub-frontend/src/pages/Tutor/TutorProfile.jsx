@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getMyProfile } from "../../services/tutorService";
+import { getMyProfile } from "../../api/tutorApi";
 
 export default function TutorProfile() {
     const [profile, setProfile] = useState(null);

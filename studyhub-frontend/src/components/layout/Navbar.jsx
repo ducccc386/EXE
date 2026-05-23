@@ -6,10 +6,10 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
-import { logout } from "../../services/authService";
+import { logout } from "../../api/authApi";
 import { ROUTES } from "../../constants";
 import mainLogo from "../../assets/studyhub.jpg";
-import { useLanguage, useTheme } from "../../hooks/usePreferences";
+import { useLanguage } from "../../hooks/usePreferences";
 
 
 const NAV_LINKS_LOGGED_IN = [
@@ -54,7 +54,6 @@ export default function Navbar() {
   const navigate = useNavigate();
   const { user, isLoggedIn } = useAuth();
   const { lang, toggleLang } = useLanguage();
-  const { theme, toggleTheme } = useTheme();
 
   const close = () => setMenuOpen(false);
 
@@ -71,8 +70,7 @@ export default function Navbar() {
   return (
     <>
 
-
-      <nav className="sticky top-0 z-50 border-b border-white/40 dark:border-slate-800/80 bg-white/70 dark:bg-slate-950/65 backdrop-blur-xl shadow-lg shadow-slate-900/5 dark:shadow-black/30">
+      <nav className="sticky top-0 z-50 border-b border-white/40 bg-white/70 backdrop-blur-xl shadow-lg shadow-slate-900/5">
         <div className="max-w-7xl mx-auto px-6 py-2 flex items-center">
 
           {/* Logo */}
@@ -87,8 +85,8 @@ export default function Navbar() {
                 key={item.to}
                 to={item.to}
                 className={`flex items-center text-sm font-bold transition-all duration-200 relative py-2 px-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 ${pathname === item.to
-                  ? "text-orange-600 bg-orange-50/85 dark:bg-slate-800/80 shadow-inner"
-                  : "text-gray-700 dark:text-slate-200 hover:text-orange-500 hover:bg-orange-50/80 dark:hover:bg-slate-800/70"
+                  ? "text-orange-600 bg-orange-50/85 shadow-inner"
+                  : "text-gray-700 hover:text-orange-500 hover:bg-orange-50/80"
                   }`}
               >
                 {item.icon}
@@ -96,7 +94,7 @@ export default function Navbar() {
               </Link>
             ))}
             {isLoggedIn && (
-              <span className="text-sm font-semibold text-gray-500 dark:text-slate-300 opacity-80">{user.fullName}</span>
+              <span className="text-sm font-semibold text-gray-500 opacity-80">{user.fullName}</span>
             )}
           </div>
 
@@ -104,27 +102,23 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-4">
             {isLoggedIn ? (
               <>
-                <button onClick={handleLogout} className="text-sm font-semibold text-gray-500 dark:text-slate-200 hover:text-red-500 transition-colors px-3 py-2 rounded-lg">{labels.logout}</button>
+                <button onClick={handleLogout} className="text-sm font-semibold text-gray-500 hover:text-red-500 transition-colors px-3 py-2 rounded-lg">{labels.logout}</button>
               </>
             ) : (
               <>
-                <Link to={ROUTES.LOGIN} className="text-sm font-bold text-gray-700 dark:text-slate-200 hover:text-orange-500 transition-colors px-3 py-2 rounded-lg">{labels.login}</Link>
-                <Link to="/register" className="bg-linear-to-r from-orange-400 to-orange-600 hover:from-orange-500 hover:to-orange-700 text-white text-sm font-bold px-7 py-2.5 rounded-full shadow-lg shadow-orange-100 transition-all border-2 border-orange-300">{labels.register}</Link>
+                <Link to={ROUTES.LOGIN} className="text-sm font-bold text-gray-700 hover:text-orange-500 transition-colors px-3 py-2 rounded-lg">{labels.login}</Link>
               </>
             )}
 
-            <button onClick={toggleLang} className="ml-1 px-3 py-1 rounded-full bg-orange-100/90 dark:bg-slate-800 text-xs font-bold text-orange-700 dark:text-orange-200 hover:bg-orange-200 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-orange-300 uppercase">
+            <button onClick={toggleLang} className="ml-1 px-3 py-1 rounded-full bg-orange-100 text-xs font-bold text-orange-700 hover:bg-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-300 uppercase">
               {lang === "vi" ? "vn | en" : "en | vn"}
             </button>
 
-            <button onClick={toggleTheme} className="w-9 h-9 rounded-full border border-gray-300/80 dark:border-slate-700 bg-white/75 dark:bg-slate-800/80 text-gray-700 dark:text-gray-100 hover:bg-white dark:hover:bg-slate-700 transition-colors" aria-label="Toggle theme">
-              {theme === "dark" ? "☀" : "☾"}
-            </button>
           </div>
 
           {/* Mobile hamburger */}
           <button
-            className={`md:hidden p-2 rounded-xl border border-orange-100/80 dark:border-slate-700 shadow-sm bg-white/80 dark:bg-slate-900/80 hover:bg-orange-50 dark:hover:bg-slate-800 transition-colors duration-200 ${menuOpen ? "ring-2 ring-orange-300" : ""}`}
+            className={`md:hidden p-2 rounded-xl border border-orange-100 shadow-sm bg-white/80 hover:bg-orange-50 transition-colors duration-200 ${menuOpen ? "ring-2 ring-orange-300" : ""}`}
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
           >
@@ -137,15 +131,15 @@ export default function Navbar() {
 
         {/* Mobile menu */}
         {menuOpen && (
-          <div className="md:hidden border-t border-orange-100 dark:border-slate-700 px-6 py-6 space-y-4 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl shadow-2xl rounded-b-3xl animate-fade-in-down">
+          <div className="md:hidden border-t border-orange-100 px-6 py-6 space-y-4 bg-white/95 backdrop-blur-xl shadow-2xl rounded-b-3xl animate-fade-in-down">
             <div className="space-y-1">
               {(isLoggedIn ? NAV_LINKS_LOGGED_IN : NAV_LINKS_GUEST).map((item) => (
                 <Link
                   key={item.to}
                   to={item.to}
                   className={`block text-sm font-bold py-2.5 px-3 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-300 ${pathname === item.to
-                    ? "bg-orange-50 dark:bg-slate-800 text-orange-600 shadow"
-                    : "text-gray-700 dark:text-gray-200 hover:bg-orange-50 dark:hover:bg-slate-800 hover:text-orange-500"
+                    ? "bg-orange-50 text-orange-600 shadow"
+                    : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
                     }`}
                   onClick={close}
                 >
@@ -168,27 +162,17 @@ export default function Navbar() {
                 <>
                   <Link
                     to={ROUTES.LOGIN}
-                    className="w-full text-center text-sm font-bold text-gray-700 dark:text-gray-100 border border-gray-200 dark:border-slate-700 py-3 rounded-2xl hover:bg-orange-50 dark:hover:bg-slate-800 hover:text-orange-500 transition-colors"
+                    className="w-full text-center text-sm font-bold text-gray-700 border border-gray-200 py-3 rounded-2xl hover:bg-orange-50 hover:text-orange-500 transition-colors"
                     onClick={close}
                   >
                     {labels.login}
-                  </Link>
-                  <Link
-                    to="/register"
-                    className="w-full text-center bg-linear-to-r from-orange-400 to-orange-600 text-white text-sm font-bold py-3 rounded-2xl shadow-md shadow-orange-100 hover:from-orange-500 hover:to-orange-700 transition-all"
-                    onClick={close}
-                  >
-                    {labels.register}
                   </Link>
                 </>
               )}
 
               <div className="flex items-center justify-between gap-3 pt-3">
-                <button onClick={toggleLang} className="px-3 py-2 rounded-full bg-orange-100 dark:bg-slate-800 text-orange-700 dark:text-orange-200 text-xs font-bold uppercase">
+                <button onClick={toggleLang} className="px-3 py-2 rounded-full bg-orange-100 text-orange-700 text-xs font-bold uppercase">
                   {lang === "vi" ? "vn | en" : "en | vn"}
-                </button>
-                <button onClick={toggleTheme} className="px-3 py-2 rounded-full border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-100 text-xs font-bold">
-                  {theme === "dark" ? "Light mode" : "Dark mode"}
                 </button>
               </div>
             </div>

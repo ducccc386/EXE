@@ -2,29 +2,30 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ROUTES, ROLES } from "./constants";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-// Pages
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import TutorListingPage from "./pages/TutorListingPage";
-import HelpPage from "./pages/HelpPage";
-import ProfilePage from "./pages/ProfilePage";
-import TutorDashboardPage from "./pages/TutorDashboardPage";
-import AdminDashboardPage from "./pages/AdminDashboardPage";
-import ParentDashboardPage from "./pages/ParentDashboardPage";
-
+// ─── Pages ────────────────────────────────────────────────────────────────────
+import HomePage              from "./pages/HomePage";
+import ProfilePage           from "./pages/ProfilePage";
+import HelpPage              from "./pages/HelpPage";
+import LoginPage             from "./pages/auth/LoginPage";
+import TutorListingPage      from "./pages/tutor/TutorListingPage";
+import TutorProfilePage      from "./pages/tutor/TutorProfilePage";
+import TutorDashboardPage    from "./pages/tutor/TutorDashboardPage";
+import AdminDashboardPage    from "./pages/admin/AdminDashboardPage";
+import ParentDashboardPage   from "./pages/parent/ParentDashboardPage";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* ── Public ── */}
-        <Route path={ROUTES.HOME} element={<HomePage />} />
-        <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-
-        <Route path={ROUTES.TUTORS} element={<TutorListingPage />} />
-        <Route path={ROUTES.HELP} element={<HelpPage />} />
+        {/* ── Public ─────────────────────────────────────────────── */}
+        <Route path={ROUTES.HOME}    element={<HomePage />} />
+        <Route path={ROUTES.LOGIN}   element={<LoginPage />} />
+        <Route path={ROUTES.HELP}    element={<HelpPage />} />
         <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
+        <Route path={ROUTES.TUTORS}  element={<TutorListingPage />} />
+        <Route path="/tutors/:id"    element={<TutorProfilePage />} />
 
+        {/* ── Protected: Tutor ───────────────────────────────────── */}
         <Route
           path={ROUTES.TUTOR_DASHBOARD}
           element={
@@ -33,14 +34,8 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path={ROUTES.ADMIN_DASHBOARD}
-          element={
-            <ProtectedRoute allowedRoles={[ROLES.ADMIN]}>
-              <AdminDashboardPage />
-            </ProtectedRoute>
-          }
-        />
+
+        {/* ── Protected: Parent ──────────────────────────────────── */}
         <Route
           path={ROUTES.PARENT_DASHBOARD}
           element={
@@ -50,8 +45,15 @@ export default function App() {
           }
         />
 
-
-
+        {/* ── Protected: Admin ───────────────────────────────────── */}
+        <Route
+          path={ROUTES.ADMIN_DASHBOARD}
+          element={
+            <ProtectedRoute allowedRoles={[ROLES.ADMIN]}>
+              <AdminDashboardPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
