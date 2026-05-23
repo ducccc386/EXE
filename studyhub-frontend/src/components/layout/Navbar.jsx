@@ -24,7 +24,7 @@ const NAV_LINKS_LOGGED_IN = [
     )
   },
   {
-    label: "Chat", to: "/chat", icon: (
+    label: "Chat", to: ROUTES.CHAT, icon: (
       <svg className="w-5 h-5 mr-2 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4-.8l-4 1 1-4A8.96 8.96 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
     )
   },

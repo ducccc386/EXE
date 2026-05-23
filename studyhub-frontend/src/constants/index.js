@@ -41,6 +41,15 @@ export const API_ENDPOINTS = {
 
   MATERIALS: "/materials",
   NEWS:      "/news",
+
+  CHAT: {
+    FRIENDS:      "/chat/friends",
+    MESSAGES:     (friendId) => `/chat/messages/${friendId}`,
+    SEND:         "/chat/messages",
+    MARK_READ:    (friendId) => `/chat/messages/${friendId}/read`,
+    UNREAD_COUNT: "/chat/unread-count",
+    WS:           "/ws/chat",
+  },
 };
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
@@ -50,6 +59,7 @@ export const ROUTES = {
   REGISTER:         "/register",
   HELP:             "/help",
   PROFILE:          "/profile",
+  CHAT:             "/chat",
   TUTORS:           "/tutors",
   TUTOR_PROFILE:    (id) => `/tutors/${id}`,
   TUTOR_DASHBOARD:  "/tutor/dashboard",

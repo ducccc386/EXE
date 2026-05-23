@@ -2,25 +2,25 @@
  * api/chatApi.js
  * ─────────────────────────────────────────────────────────────────────────────
  * API calls cho tính năng Chat / Messaging
- * WebSocket endpoint: ws://localhost:8080/ws/chat
- * REST fallback endpoint: /api/chat/*
+ * WebSocket: ws://localhost:8080/ws/chat
+ * REST:      /api/chat/*
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
 import apiClient from "./client";
-import { API_BASE_URL } from "../constants";
+import { API_BASE_URL, API_ENDPOINTS } from "../constants";
 
 // ── REST API ──────────────────────────────────────────────────────────────────
 
 /** Lấy danh sách bạn bè / người có thể nhắn tin */
 export async function getFriends() {
-  const { data } = await apiClient.get("/chat/friends");
+  const { data } = await apiClient.get(API_ENDPOINTS.CHAT.FRIENDS);
   return data;
 }
 
 /** Lấy lịch sử tin nhắn với một user */
 export async function getMessages(friendId, page = 0, size = 50) {
-  const { data } = await apiClient.get(`/chat/messages/${friendId}`, {
+  const { data } = await apiClient.get(API_ENDPOINTS.CHAT.MESSAGES(friendId), {
     params: { page, size },
   });
   return data;
@@ -28,7 +28,7 @@ export async function getMessages(friendId, page = 0, size = 50) {
 
 /** Gửi tin nhắn qua REST (fallback khi WebSocket không khả dụng) */
 export async function sendMessageRest(receiverId, content) {
-  const { data } = await apiClient.post("/chat/messages", {
+  const { data } = await apiClient.post(API_ENDPOINTS.CHAT.SEND, {
     receiverId,
     content,
   });
@@ -37,12 +37,12 @@ export async function sendMessageRest(receiverId, content) {
 
 /** Đánh dấu đã đọc tất cả tin nhắn từ một người */
 export async function markAsRead(friendId) {
-  await apiClient.put(`/chat/messages/${friendId}/read`);
+  await apiClient.put(API_ENDPOINTS.CHAT.MARK_READ(friendId));
 }
 
 /** Lấy số tin nhắn chưa đọc */
 export async function getUnreadCount() {
-  const { data } = await apiClient.get("/chat/unread-count");
+  const { data } = await apiClient.get(API_ENDPOINTS.CHAT.UNREAD_COUNT);
   return data;
 }
 
@@ -56,11 +56,11 @@ export async function getUnreadCount() {
  */
 export function createChatSocket(token, handlers = {}) {
   const wsBase = API_BASE_URL.replace(/^http/, "ws").replace("/api", "");
-  const ws = new WebSocket(`${wsBase}/ws/chat?token=${token}`);
+  const ws = new WebSocket(`${wsBase}${API_ENDPOINTS.CHAT.WS}?token=${token}`);
 
-  ws.onopen = () => handlers.onOpen?.();
-  ws.onclose = (e) => handlers.onClose?.(e);
-  ws.onerror = (e) => handlers.onError?.(e);
+  ws.onopen    = () => handlers.onOpen?.();
+  ws.onclose   = (e) => handlers.onClose?.(e);
+  ws.onerror   = (e) => handlers.onError?.(e);
   ws.onmessage = (e) => {
     try {
       const payload = JSON.parse(e.data);

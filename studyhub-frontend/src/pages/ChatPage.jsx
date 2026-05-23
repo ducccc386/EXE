@@ -23,42 +23,42 @@ import {
 // ─── i18n ──────────────────────────────────────────────────────────────────────
 const TEXT = {
   vi: {
-    messaging: "Nhắn tin",
-    selectFriend: "Chọn người để trò chuyện",
-    noFriends: "Chưa có bạn bè. Hãy kết nối để bắt đầu trò chuyện!",
-    selectPrompt: "Chọn người để bắt đầu trò chuyện",
-    typeMessage: "Nhập tin nhắn...",
-    online: "Đang hoạt động",
-    offline: "Ngoại tuyến",
-    send: "Gửi",
-    today: "Hôm nay",
-    searchFriend: "Tìm kiếm...",
-    you: "Bạn: ",
-    unreadMessages: (n) => `${n} tin chưa đọc`,
-    tutor: "Gia sư",
-    parent: "Phụ huynh",
-    admin: "Admin",
-    connectionError: "Mất kết nối. Đang thử lại...",
-    connected: "Đã kết nối",
+    messaging:        "Nhắn tin",
+    selectFriend:     "Chọn người để trò chuyện",
+    noFriends:        "Chưa có bạn bè. Hãy kết nối để bắt đầu trò chuyện!",
+    selectPrompt:     "Chọn người để bắt đầu trò chuyện",
+    typeMessage:      "Nhập tin nhắn...",
+    online:           "Đang hoạt động",
+    offline:          "Ngoại tuyến",
+    send:             "Gửi",
+    today:            "Hôm nay",
+    searchFriend:     "Tìm kiếm...",
+    you:              "Bạn: ",
+    unreadMessages:   (n) => `${n} tin chưa đọc`,
+    tutor:            "Gia sư",
+    parent:           "Phụ huynh",
+    admin:            "Admin",
+    connectionError:  "Mất kết nối. Đang thử lại...",
+    connected:        "Đã kết nối",
   },
   en: {
-    messaging: "Messaging",
-    selectFriend: "Select a friend to chat with",
-    noFriends: "No friends yet. Add friends to start chatting!",
-    selectPrompt: "Select a friend to start chatting",
-    typeMessage: "Type a message...",
-    online: "Online",
-    offline: "Offline",
-    send: "Send",
-    today: "Today",
-    searchFriend: "Search...",
-    you: "You: ",
-    unreadMessages: (n) => `${n} unread`,
-    tutor: "Tutor",
-    parent: "Parent",
-    admin: "Admin",
-    connectionError: "Connection lost. Reconnecting...",
-    connected: "Connected",
+    messaging:        "Messaging",
+    selectFriend:     "Select a friend to chat with",
+    noFriends:        "No friends yet. Add friends to start chatting!",
+    selectPrompt:     "Select a friend to start chatting",
+    typeMessage:      "Type a message...",
+    online:           "Online",
+    offline:          "Offline",
+    send:             "Send",
+    today:            "Today",
+    searchFriend:     "Search...",
+    you:              "You: ",
+    unreadMessages:   (n) => `${n} unread`,
+    tutor:            "Tutor",
+    parent:           "Parent",
+    admin:            "Admin",
+    connectionError:  "Connection lost. Reconnecting...",
+    connected:        "Connected",
   },
 };
 
@@ -96,8 +96,9 @@ function Avatar({ name, size = "md", online }) {
       </div>
       {online !== undefined && (
         <span
-          className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white ${online ? "bg-green-400" : "bg-gray-300"
-            }`}
+          className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white ${
+            online ? "bg-green-400" : "bg-gray-300"
+          }`}
         />
       )}
     </div>
@@ -107,9 +108,9 @@ function Avatar({ name, size = "md", online }) {
 // ─── Role badge ────────────────────────────────────────────────────────────────
 function RoleBadge({ role, t }) {
   const map = {
-    TUTOR: { label: t.tutor, cls: "bg-blue-50 text-blue-600 border-blue-100" },
+    TUTOR:  { label: t.tutor,  cls: "bg-blue-50 text-blue-600 border-blue-100" },
     PARENT: { label: t.parent, cls: "bg-orange-50 text-orange-600 border-orange-100" },
-    ADMIN: { label: t.admin, cls: "bg-gray-50 text-gray-600 border-gray-100" },
+    ADMIN:  { label: t.admin,  cls: "bg-gray-50 text-gray-600 border-gray-100" },
   };
   const { label, cls } = map[role] || map.ADMIN;
   return (
@@ -124,10 +125,11 @@ function FriendItem({ friend, active, onClick, t }) {
   return (
     <button
       onClick={() => onClick(friend)}
-      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-150 text-left group ${active
+      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-150 text-left group ${
+        active
           ? "bg-blue-50 border border-blue-100 shadow-sm"
           : "hover:bg-gray-50 border border-transparent"
-        }`}
+      }`}
     >
       <Avatar name={friend.fullName} online={friend.online} />
       <div className="flex-1 min-w-0">
@@ -155,15 +157,17 @@ function MessageBubble({ msg, isMe }) {
   return (
     <div className={`flex items-end gap-2 ${isMe ? "flex-row-reverse" : "flex-row"}`}>
       <div
-        className={`max-w-[72%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed shadow-sm ${isMe
+        className={`max-w-[72%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed shadow-sm ${
+          isMe
             ? "bg-blue-500 text-white rounded-br-md"
             : "bg-white text-gray-800 border border-gray-100 rounded-bl-md"
-          }`}
+        }`}
       >
         <p>{msg.content}</p>
         <span
-          className={`block text-[10px] mt-1 ${isMe ? "text-blue-200 text-right" : "text-gray-400"
-            }`}
+          className={`block text-[10px] mt-1 ${
+            isMe ? "text-blue-200 text-right" : "text-gray-400"
+          }`}
         >
           {msg.time}
         </span>
@@ -208,19 +212,19 @@ export default function ChatPage() {
   const { lang } = useLanguage();
   const t = TEXT[lang] || TEXT.vi;
 
-  const [friends, setFriends] = useState(MOCK_FRIENDS);
-  const [filteredFriends, setFiltered] = useState(MOCK_FRIENDS);
-  const [selectedFriend, setSelected] = useState(null);
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
-  const [search, setSearch] = useState("");
-  const [wsStatus, setWsStatus] = useState("idle"); // idle | connected | error
-  const [sending, setSending] = useState(false);
-  const [dropdownOpen, setDropdown] = useState(false);
+  const [friends, setFriends]           = useState(MOCK_FRIENDS);
+  const [filteredFriends, setFiltered]  = useState(MOCK_FRIENDS);
+  const [selectedFriend, setSelected]   = useState(null);
+  const [messages, setMessages]         = useState([]);
+  const [input, setInput]               = useState("");
+  const [search, setSearch]             = useState("");
+  const [wsStatus, setWsStatus]         = useState("idle"); // idle | connected | error
+  const [sending, setSending]           = useState(false);
+  const [dropdownOpen, setDropdown]     = useState(false);
 
-  const wsRef = useRef(null);
+  const wsRef         = useRef(null);
   const messagesEndRef = useRef(null);
-  const inputRef = useRef(null);
+  const inputRef      = useRef(null);
 
   // ── Auto-scroll ──────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -248,7 +252,7 @@ export default function ChatPage() {
       setFriends((prev) =>
         prev.map((f) => (f.id === selectedFriend.id ? { ...f, unread: 0 } : f))
       );
-      markAsRead(selectedFriend.id).catch(() => { });
+      markAsRead(selectedFriend.id).catch(() => {});
     }
 
     // Focus input
@@ -262,17 +266,17 @@ export default function ChatPage() {
     if (!token) return;
 
     const ws = createChatSocket(token, {
-      onOpen: () => setWsStatus("connected"),
+      onOpen:  () => setWsStatus("connected"),
       onClose: () => setWsStatus("idle"),
       onError: () => setWsStatus("error"),
       onMessage: (payload) => {
         if (payload.senderId === selectedFriend?.id) {
           setMessages((prev) => [...prev, {
-            id: Date.now().toString(),
+            id:       Date.now().toString(),
             senderId: payload.senderId,
-            content: payload.content,
-            time: new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
-            type: "text",
+            content:  payload.content,
+            time:     new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
+            type:     "text",
           }]);
         } else {
           // Update unread badge
@@ -289,7 +293,7 @@ export default function ChatPage() {
 
     wsRef.current = ws;
     return () => ws.close();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   // ── Send message ─────────────────────────────────────────────────────────────
@@ -298,11 +302,11 @@ export default function ChatPage() {
     if (!content || !selectedFriend || sending) return;
 
     const newMsg = {
-      id: Date.now().toString(),
+      id:       Date.now().toString(),
       senderId: "me",
       content,
-      time: new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
-      type: "text",
+      time:     new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
+      type:     "text",
     };
 
     setMessages((prev) => [...prev, newMsg]);

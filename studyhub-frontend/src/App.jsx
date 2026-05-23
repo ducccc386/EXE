@@ -25,7 +25,7 @@ export default function App() {
         <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
         <Route path={ROUTES.TUTORS}  element={<TutorListingPage />} />
         <Route path="/tutors/:id"    element={<TutorProfilePage />} />
-        <Route path="/chat"          element={<ChatPage />} />
+        <Route path={ROUTES.CHAT}       element={<ChatPage />} />
 
         {/* ── Protected: Tutor ───────────────────────────────────── */}
         <Route
