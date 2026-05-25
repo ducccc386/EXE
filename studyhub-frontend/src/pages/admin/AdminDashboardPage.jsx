@@ -1,3 +1,17 @@
+/**
+ * pages/admin/AdminDashboardPage.jsx
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Dashboard tổng quan cho Admin (role: ADMIN).
+ *
+ * [TODO] Kết nối backend khi sẵn sàng:
+ *   import { getAdminStats, getUsers, getEkycQueue } from "../../api/adminApi";
+ *
+ * Spring Boot cần:
+ *   GET /api/admin/stats → { totalUsers, activeTutors, pendingEkyc, revenueThisMonth }
+ *   GET /api/admin/users → Page<UserDTO>
+ *   GET /api/admin/ekyc  → EkycRequestDTO[]
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
 import Navbar from "../../components/layout/Navbar";
 import Footer from "../../components/layout/Footer";
 

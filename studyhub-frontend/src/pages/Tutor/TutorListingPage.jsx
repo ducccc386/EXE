@@ -3,7 +3,7 @@ import Navbar from "../../components/layout/Navbar";
 import Footer from "../../components/layout/Footer";
 import { VerifiedBadge, StarRating, Avatar, SubjectBadge, formatPrice } from "../../components/ui";
 import { getTutors } from "../../api/tutorApi";
-import { SUBJECTS, PRICE_RANGES } from "../../mocks/tutors";
+import { SUBJECTS, PRICE_RANGES } from "../../constants/tutor";
 import Slider from "../../components/Slider";
 
 function TutorCard({ tutor, onView }) {

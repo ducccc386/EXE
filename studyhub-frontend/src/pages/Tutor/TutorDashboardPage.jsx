@@ -1,3 +1,17 @@
+/**
+ * pages/tutor/TutorDashboardPage.jsx
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Dashboard tổng quan cho Gia sư (role: TUTOR).
+ *
+ * [MOCK] Dữ liệu stats đang hardcode. Khi backend sẵn sàng:
+ *   import { getMyStats, getMySchedule } from "../../api/tutorApi";
+ *   useEffect(() => { getMyStats().then(setStats); getMySchedule().then(setSchedule); }, []);
+ *
+ * Spring Boot cần:
+ *   GET /api/tutor/stats    → { totalStudents, totalNewStudents, rating, earningsMonth }
+ *   GET /api/tutor/schedule → ScheduleDTO[] (các buổi dạy hôm nay)
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
 import Navbar from "../../components/layout/Navbar";
 import Footer from "../../components/layout/Footer";
 

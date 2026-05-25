@@ -2,7 +2,8 @@ import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { tutors, getTutorById } from "../mocks/tutors";
+// [MOCK] Xóa dòng dưới khi GET /api/tutors và GET /api/tutors/:id sẵn sàng
+import { tutors, getTutorByIdMock } from "../mocks/tutors.mock";
 import Slider from "../components/Slider";
 import { useLanguage } from "../hooks/usePreferences";
 import { FaMapMarkerAlt, FaStar, FaRegStar, FaGraduationCap, FaBook } from "react-icons/fa";
@@ -84,7 +85,7 @@ function StarRating({ rating, max = 5, size = "text-base" }) {
 function TutorProfileDrawer({ tutor, open, onClose }) {
   const [visible, setVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const fullProfile = tutor ? getTutorById(tutor.id) : null;
+  const fullProfile = tutor ? getTutorByIdMock(tutor.id) : null;
 
   useEffect(() => {
     if (open) {

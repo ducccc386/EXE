@@ -3,7 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../../components/layout/Navbar";
 import Footer from "../../components/layout/Footer";
 import { VerifiedBadge, StarRating, Avatar, SubjectBadge, formatPrice } from "../../components/ui";
-import { getTutorById } from "../../mocks/tutors";
+import { getTutorByIdMock } from "../../mocks/tutors.mock";
+// TODO (backend): thay bằng getTutorById từ tutorApi.js khi GET /api/tutors/:id sẵn sàng
 
 const DAYS = [
   { key: "mon", label: "T2" },

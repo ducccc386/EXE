@@ -1,3 +1,17 @@
+/**
+ * pages/parent/ParentDashboardPage.jsx
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Dashboard tổng quan cho Phụ huynh (role: PARENT).
+ *
+ * [TODO] Kết nối backend khi sẵn sàng:
+ *   import { getMyClasses, getEscrow, getAssessments } from "../../api/parentApi";
+ *
+ * Spring Boot cần:
+ *   GET /api/parent/classes     → ClassDTO[]
+ *   GET /api/parent/escrow      → { balance, currency }
+ *   GET /api/parent/assessments → AssessmentDTO[]
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
 import Navbar from "../../components/layout/Navbar";
 import Footer from "../../components/layout/Footer";
 

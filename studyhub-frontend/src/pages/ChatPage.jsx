@@ -12,13 +12,9 @@ import Footer from "../components/layout/Footer";
 import { useAuth } from "../hooks/useAuth";
 import { useLanguage } from "../hooks/usePreferences";
 import { STORAGE_KEYS } from "../constants";
-import {
-  MOCK_FRIENDS,
-  MOCK_MESSAGES,
-  createChatSocket,
-  sendMessageRest,
-  markAsRead,
-} from "../api/chatApi";
+// [MOCK] Xóa 2 dòng dưới khi getFriends() và getMessages() từ chatApi sẵn sàng
+import { MOCK_FRIENDS, MOCK_MESSAGES } from "../mocks/chat.mock";
+import { createChatSocket, sendMessageRest, markAsRead } from "../api/chatApi";
 
 // ─── i18n ──────────────────────────────────────────────────────────────────────
 const TEXT = {
