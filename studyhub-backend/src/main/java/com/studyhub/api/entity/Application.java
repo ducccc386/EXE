@@ -1,34 +1,29 @@
 package com.studyhub.api.entity;
 
-import java.time.LocalDateTime;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Applications")
 @Data
-@NoArgsConstructor
 public class Application {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "job_id")
-    private JobPost job;
+    @Column(name = "request_id", nullable = false)
+    private Long requestId;
 
-    @ManyToOne
-    @JoinColumn(name = "tutor_id")
-    private User tutor; // User có role TUTOR
+    @Column(name = "tutor_profile_id", nullable = false)
+    private Long tutorProfileId;
 
-    private LocalDateTime appliedAt = LocalDateTime.now();
-    private String status = "PENDING"; // PENDING, ACCEPTED, REJECTED
+    @Column(columnDefinition = "nvarchar(max)")
+    private String message;
+
+    @Column(length = 20)
+    private String status = "PENDING"; // REJECTED, ACCEPTED, PENDING
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

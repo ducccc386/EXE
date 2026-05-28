@@ -1,43 +1,32 @@
 package com.studyhub.api.entity;
 
-import java.time.LocalDateTime;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Reviews")
 @Data
-@NoArgsConstructor
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "contract_id")
-    private Contract contract;
+    @Column(name = "booking_id", nullable = false, unique = true)
+    private Long bookingId;
 
-    @ManyToOne
-    @JoinColumn(name = "from_user_id")
-    private User fromUser;
+    @Column(name = "parent_id", nullable = false)
+    private Long parentId;
 
-    @ManyToOne
-    @JoinColumn(name = "to_user_id")
-    private User toUser;
+    @Column(name = "tutor_profile_id", nullable = false)
+    private Long tutorProfileId;
 
-    private Integer rating; // 1-5
+    @Column(nullable = false)
+    private Integer rating;
 
-    @Column(columnDefinition = "NVARCHAR(MAX)")
+    @Column(columnDefinition = "nvarchar(max)")
     private String comment;
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 }

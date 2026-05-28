@@ -4,13 +4,9 @@
  * Tất cả API calls dành cho Phụ huynh (role: PARENT).
  * Tất cả endpoints yêu cầu JWT token (tự động gắn bởi client.js).
  *
- * Spring Boot endpoints:
- *   POST /api/parent/match         Body: MatchRequestDTO  → TutorDTO[]
- *   POST /api/parent/book-trial    Body: BookTrialDTO     → BookingDTO
- *   GET  /api/parent/classes       → ClassDTO[]
- *   GET  /api/parent/escrow        → { balance, currency, lastTopup }
- *   POST /api/parent/topup         Body: { amount }       → { balance }
- *   GET  /api/parent/assessments   → AssessmentDTO[]
+ * Backend endpoints:
+ *   POST /api/tutorhub/requests/create  → ParentRequest
+ *   GET  /api/tutorhub/requests/open    → ParentRequest[]
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -18,34 +14,22 @@ import apiClient from "./client";
 import { API_ENDPOINTS } from "../constants";
 
 /**
- * Gợi ý gia sư phù hợp theo tiêu chí.
- * @param {object} criteria - { subject, location, priceMax, schedule? }
- * @returns {Promise<TutorDTO[]>}
+ * Phụ huynh tạo bài đăng tìm gia sư.
+ * POST /api/tutorhub/requests/create
+ * Body: { parentId, subjectId, title, description, grade, budget, city, addressDetail, 
+ *         teachingMode, sessionsPerWeek, scheduleInfo }
  */
-export async function matchTutors(criteria) {
-  const { data } = await apiClient.post(API_ENDPOINTS.PARENT.MATCH, criteria);
+export async function createParentRequest(payload) {
+  const { data } = await apiClient.post(API_ENDPOINTS.TUTORHUB.REQUESTS_CREATE, payload);
   return data;
 }
 
 /**
- * Đặt lịch học thử với gia sư.
- * @param {object} payload - { tutorId, date, timeSlot, subject, studentName }
- * @returns {Promise<BookingDTO>}
+ * Lấy danh sách bài đăng đang mở (để gia sư tìm việc).
+ * GET /api/tutorhub/requests/open
  */
-export async function bookTrial(payload) {
-  const { data } = await apiClient.post(API_ENDPOINTS.PARENT.BOOK_TRIAL, payload);
-  return data;
-}
-
-/** Lấy danh sách lớp học đang có */
-export async function getMyClasses() {
-  const { data } = await apiClient.get(API_ENDPOINTS.PARENT.CLASSES);
-  return data;
-}
-
-/** Lấy thông tin ký quỹ (escrow) → { balance, currency, lastTopup } */
-export async function getEscrow() {
-  const { data } = await apiClient.get(API_ENDPOINTS.PARENT.ESCROW);
+export async function getOpenRequests() {
+  const { data } = await apiClient.get(API_ENDPOINTS.TUTORHUB.REQUESTS_OPEN);
   return data;
 }
 

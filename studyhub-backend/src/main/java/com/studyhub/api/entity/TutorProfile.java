@@ -2,53 +2,59 @@ package com.studyhub.api.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table(name = "TutorProfiles")
-@Data
-@NoArgsConstructor
+@Table(name = "Tutor_Profiles")
+@Data // Lombok sẽ tự động sinh Getter/Setter cho cả trường subjects mới thêm
 public class TutorProfile {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", unique = true)
-    private User user;
+    @Column(name = "user_id", nullable = false, unique = true)
+    private Long userId;
 
-    @Column(columnDefinition = "NVARCHAR(MAX)")
+    @Column(columnDefinition = "nvarchar(max)")
     private String bio;
 
+    @Column(length = 255)
     private String education;
 
-    @Column(columnDefinition = "NVARCHAR(MAX)")
-    private String experienceSummary;
+    @Column(name = "experience_years")
+    private Integer experienceYears = 0;
 
-    private BigDecimal hourlyRateMin;
+    @Column(name = "teaching_method", columnDefinition = "nvarchar(max)")
+    private String teachingMethod;
 
-    @Column(name = "is_verified")
-    private Boolean isVerified = false;
+    @Column(name = "hourly_rate")
+    private BigDecimal hourlyRate;
+
+    @Column(length = 100)
+    private String city;
+
+    @Column(name = "teaching_mode", length = 20)
+    private String teachingMode; // BOTH, OFFLINE, ONLINE
+
+    private Boolean verified = false;
 
     @Column(name = "average_rating")
-    private Double averageRating = 0.0;
+    private BigDecimal averageRating = BigDecimal.ZERO;
 
-    // --- Dữ liệu để tính Personality Score (Matching Algorithm) ---
-    private Integer patienceLevel = 5; // Thang điểm 1-10
-    private Integer communicationStyle = 5; // 1: Nghiêm khắc, 10: Vui vẻ
-    private Integer teachingSpeed = 5; // 1: Chậm, 10: Nhanh
-
-    // --- Dữ liệu bổ trợ Matching ---
+    @Column(name = "total_reviews")
     private Integer totalReviews = 0;
-    private String identityCardNumber;
 
-    // QUAN TRỌNG: Sử dụng đúng Class Subject của dự án
-    @ManyToMany
-    @JoinTable(name = "Tutor_Subjects", joinColumns = @JoinColumn(name = "tutor_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
-    private Set<Subject> subjects = new HashSet<>();
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    // 🔥 THÊM MỐI QUAN HỆ NÀY: Kết nối trực tiếp sang bảng trung gian
+    // Tutor_Subjects dưới DB
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "Tutor_Subjects", // Tên bảng trung gian trong SQL Server của bạn
+            joinColumns = @JoinColumn(name = "tutor_profile_id"), // Khóa ngoại trỏ tới bảng này
+            inverseJoinColumns = @JoinColumn(name = "subject_id") // Khóa ngoại trỏ tới bảng Subjects
+    )
+    private List<Subject> subjects;
 }

@@ -1,46 +1,41 @@
 package com.studyhub.api.entity;
 
-import java.time.LocalDateTime;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Users")
 @Data
-@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "full_name", nullable = false, length = 100)
+    private String fullName;
+
+    @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @JsonIgnore
-    private String password;
+    @Column(name = "password_hash", nullable = false, length = 255)
+    private String passwordHash;
 
-    private String fullName;
+    @Column(length = 20)
     private String phone;
-    private String avatarUrl;
-    private Double latitude;
-    private Double longitude;
-    private String status = "ACTIVE";
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
+    @Column(nullable = false, length = 20)
+    private String role; // ADMIN, TUTOR, PARENT
+
+    @Column(name = "avatar_url", length = 255)
+    private String avatarUrl;
+
+    @Column(length = 20)
+    private String status = "ACTIVE"; // PENDING, BANNED, ACTIVE
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt = LocalDateTime.now();
 }

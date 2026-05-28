@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import Navbar from "../../components/layout/Navbar";
 import Footer from "../../components/layout/Footer";
 import { VerifiedBadge, StarRating, Avatar, SubjectBadge, formatPrice } from "../../components/ui";
-import { getTutors } from "../../api/tutorApi";
+import { getAllTutors } from "../../api/tutorApi";
+import { transformTutorProfile } from "../../utils/dataTransform";
 import { SUBJECTS, PRICE_RANGES } from "../../constants/tutor";
 import Slider from "../../components/Slider";
 
@@ -48,7 +49,7 @@ function TutorProfileDrawer({ tutor, open, onClose }) {
     <div className="fixed inset-0 z-50">
       <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" onClick={onClose} />
       <aside className="absolute right-0 top-0 h-full w-full max-w-md bg-white dark:bg-slate-900 shadow-2xl border-l border-gray-100 dark:border-slate-800 overflow-y-auto animate-in slide-in-from-right-6 duration-300">
-          <div className="p-6 border-b border-gray-100 flex items-start justify-between">
+        <div className="p-6 border-b border-gray-100 flex items-start justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-600">Tutor Profile</p>
             <h3 className="text-xl font-extrabold text-gray-900 mt-1">Thông tin gia sư</h3>
@@ -86,7 +87,7 @@ function TutorProfileDrawer({ tutor, open, onClose }) {
           </div>
 
           <div>
-            <h5 className="text-sm font-bold text-gray-900 mb-3">Kỹ năng</h5>
+            <h5 className="text-sm font-bold text-gray-900 mb-3">Môn học</h5>
             <div className="flex flex-wrap gap-2">
               {(tutor.tags || []).map((tag) => (
                 <span key={tag} className="px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold">
@@ -101,7 +102,7 @@ function TutorProfileDrawer({ tutor, open, onClose }) {
               Nhắn tin
             </button>
             <button className="w-full rounded-2xl border border-orange-200 text-orange-600 font-bold py-3 hover:bg-orange-50 transition-colors">
-              Gửi kết bạn
+              Ứng tuyển dạy học
             </button>
           </div>
         </div>
@@ -114,6 +115,7 @@ export default function TutorListingPage() {
   const [tutors, setTutors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTutor, setSelectedTutor] = useState(null);
+  const [error, setError] = useState(null);
 
   const [subject, setSubject] = useState("Tất cả");
   const [priceRange, setPriceRange] = useState(0);
@@ -122,29 +124,41 @@ export default function TutorListingPage() {
 
   useEffect(() => {
     let mounted = true;
+
     async function fetchTutors() {
       try {
         setLoading(true);
-        const data = await getTutors();
-        if (mounted) setTutors(data || []);
+        setError(null);
+        const backendTutors = await getAllTutors();
+
+        if (mounted && Array.isArray(backendTutors)) {
+          // Transform dữ liệu từ backend
+          const transformed = backendTutors.map(t => transformTutorProfile(t));
+          setTutors(transformed);
+        }
       } catch (err) {
         console.error("Failed to load tutors", err);
+        if (mounted) setError("Không thể tải danh sách gia sư. Vui lòng thử lại.");
       } finally {
         if (mounted) setLoading(false);
       }
     }
+
     fetchTutors();
     return () => (mounted = false);
   }, []);
 
   const filtered = tutors.filter((t) => {
-    const matchSubject = subject === "Tất cả" || t.subject === subject;
+    const matchSubject = subject === "Tất cả" || t.subject === subject || (t.tags || []).includes(subject);
     const range = PRICE_RANGES[priceRange] || { min: 0, max: Infinity };
     const price = t.hourlyRate || t.pricePerHour || 0;
     const matchPrice = price >= range.min && price <= range.max;
     const matchVerified = !verifiedOnly || t.verified;
     const q = searchQuery.trim().toLowerCase();
-    const matchSearch = !q || (t.name || "").toLowerCase().includes(q) || (t.subject || "").toLowerCase().includes(q) || (t.tags || []).some(tag => tag.toLowerCase().includes(q));
+    const matchSearch = !q ||
+      (t.name || "").toLowerCase().includes(q) ||
+      (t.subject || "").toLowerCase().includes(q) ||
+      (t.tags || []).some(tag => tag.toLowerCase().includes(q));
     return matchSubject && matchPrice && matchVerified && matchSearch;
   });
 
@@ -158,26 +172,44 @@ export default function TutorListingPage() {
         <h1 className="text-3xl md:text-4xl font-extrabold mb-6 text-center">Tìm gia sư phù hợp</h1>
 
         <div className="flex flex-col md:flex-row gap-4 mb-8 justify-center items-center">
-          <input type="text" placeholder="Tìm theo tên gia sư, môn học, kỹ năng..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="border rounded-lg px-4 py-3 w-full md:w-2/5 bg-white dark:bg-slate-900 dark:border-slate-800" />
-          <select value={subject} onChange={e => setSubject(e.target.value)} className="border rounded-lg px-4 py-3 w-full md:w-1/5 bg-white dark:bg-slate-900 dark:border-slate-800">
+          <input
+            type="text"
+            placeholder="Tìm theo tên gia sư, môn học, kỹ năng..."
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            className="border rounded-lg px-4 py-3 w-full md:w-2/5 bg-white dark:bg-slate-900 dark:border-slate-800"
+          />
+          <select
+            value={subject}
+            onChange={e => setSubject(e.target.value)}
+            className="border rounded-lg px-4 py-3 w-full md:w-1/5 bg-white dark:bg-slate-900 dark:border-slate-800"
+          >
             <option value="Tất cả">Tất cả</option>
             {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
-          <select value={priceRange} onChange={e => setPriceRange(Number(e.target.value))} className="border rounded-lg px-4 py-3 w-full md:w-1/5 bg-white dark:bg-slate-900 dark:border-slate-800">
+          <select
+            value={priceRange}
+            onChange={e => setPriceRange(Number(e.target.value))}
+            className="border rounded-lg px-4 py-3 w-full md:w-1/5 bg-white dark:bg-slate-900 dark:border-slate-800"
+          >
             {PRICE_RANGES.map((r, i) => <option key={i} value={i}>{r.label}</option>)}
           </select>
         </div>
 
         {loading ? (
           <div className="text-center py-20 text-gray-500">Đang tải gia sư…</div>
+        ) : error ? (
+          <div className="text-center py-20 text-red-500">{error}</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.length === 0 ? (
-              <div className="col-span-full text-center text-gray-500 dark:text-gray-400 font-semibold">Không tìm thấy gia sư.</div>
+              <div className="col-span-full text-center text-gray-500 dark:text-gray-400 font-semibold">
+                {tutors.length === 0 ? "Chưa có gia sư nào." : "Không tìm thấy gia sư phù hợp."}
+              </div>
             ) : (
-                filtered.map(t => (
-                  <TutorCard key={t.id} tutor={t} onView={() => setSelectedTutor(t)} />
-                ))
+              filtered.map(t => (
+                <TutorCard key={t.id} tutor={t} onView={() => setSelectedTutor(t)} />
+              ))
             )}
           </div>
         )}
